@@ -1,18 +1,20 @@
-import type { Fn, Getter } from '@/types'
-import { onScopeDispose } from 'vue'
+import type { Fn, MaybeRefOrGetter } from '@/types'
+import { onScopeDispose, toValue } from 'vue'
 
 interface UseDelayedOpenOptions {
-  defaultShowDelay?: Getter<number | undefined>
-  defaultHideDelay?: Getter<number | undefined>
+  defaultShowDelay?: MaybeRefOrGetter<number | undefined>
+  defaultHideDelay?: MaybeRefOrGetter<number | undefined>
 }
 
 export function useDelayedOpen(show: Fn, hide: Fn, options: UseDelayedOpenOptions) {
-  let showTimeoutID: NodeJS.Timeout = -1 as unknown as NodeJS.Timeout
-  let hideTimeoutID: NodeJS.Timeout = -1 as unknown as NodeJS.Timeout
+  const { defaultHideDelay = 0, defaultShowDelay = 0 } = options
+
+  let showTimeoutID: ReturnType<typeof setTimeout>
+  let hideTimeoutID: ReturnType<typeof setTimeout>
 
   const _show = (delay?: number) => {
     clearTimeouts()
-    const _delay = delay ?? options.defaultShowDelay?.() ?? 0
+    const _delay = delay ?? toValue(defaultShowDelay)
 
     if (_delay === 0) {
       show()
@@ -23,7 +25,7 @@ export function useDelayedOpen(show: Fn, hide: Fn, options: UseDelayedOpenOption
 
   const _hide = (delay?: number) => {
     clearTimeouts()
-    const _delay = delay ?? options.defaultHideDelay?.() ?? 0
+    const _delay = delay ?? toValue(defaultHideDelay)
 
     if (_delay === 0) {
       hide()
