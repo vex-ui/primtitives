@@ -1,0 +1,15 @@
+:not(body, html, .vex-default-scrollbar)::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+:not(body, html, .vex-default-scrollbar)::-webkit-scrollbar:hover {
+  background-color: var(--vex-c-neutral-100);
+}
+
+:not(body, html, .vex-default-scrollbar)::-webkit-scrollbar-thumb {
+  width: 4px;
+  height: 4px;
+  background-color: var(--vex-c-neutral-300);
+  border-radius: 99px;
+}

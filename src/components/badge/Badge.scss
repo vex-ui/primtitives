@@ -1,0 +1,68 @@
+.vex-badge {
+  z-index: 10;
+  border-radius: var(--vex-border-radius-full);
+  position: absolute;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  border: 2px solid white;
+}
+
+//------ with value ------//
+
+.vex-badge.--value {
+  // width: max-content;
+  padding: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: content-box;
+}
+
+//------ size ------//
+
+.vex-badge {
+  &.--size-sm {
+    min-height: 0.75rem;
+    min-width: 0.75rem;
+    font-size: var(--vex-font-size-xs);
+  }
+  &.--size-md {
+    min-height: 1rem;
+    min-width: 1rem;
+    font-size: var(--vex-font-size-sm);
+  }
+  &.--size-lg {
+    min-height: 1.25rem;
+    min-width: 1.25rem;
+    font-size: var(--vex-font-size-md);
+  }
+}
+
+//------ color ------//
+
+.vex-badge {
+  &.--color-primary {
+    background-color: var(--vex-c-primary-500);
+    color: white;
+  }
+  &.--color-accent {
+    background-color: var(--vex-c-accent-500);
+    color: white;
+  }
+  &.--color-danger {
+    background-color: var(--vex-c-danger-500);
+    color: white;
+  }
+  &.--color-warning {
+    background-color: var(--vex-c-warning-300);
+    color: black;
+  }
+  &.--color-success {
+    background-color: var(--vex-c-success-300);
+    color: black;
+  }
+}

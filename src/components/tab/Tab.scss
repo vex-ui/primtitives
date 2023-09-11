@@ -1,0 +1,109 @@
+//------ Tabs ------//
+
+.vex-tabs {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  justify-content: start;
+  padding: 4px;
+  border-radius: var(--vex-border-radius-sm);
+  font-size: var(--vex-font-size-sm);
+}
+
+//------ Trigger ------//
+
+.vex-tabs-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: start;
+  gap: var(--vex-spacing-2);
+  z-index: 2;
+  position: relative;
+  padding: var(--vex-spacing-2) var(--vex-spacing-3);
+
+  line-height: 1;
+  font-weight: 500;
+  color: var(--vex-c-neutral-400);
+  cursor: pointer;
+  transition: color 150ms;
+  border-radius: inherit;
+
+  &.--active {
+    color: var(--vex-c-neutral-900);
+  }
+}
+
+//------ Pointer ------//
+
+.vex-tabs-pointer {
+  position: absolute;
+  z-index: 1;
+  transition-property: translate, scale;
+  transition-duration: 300ms;
+  transition-timing-function: var(--vex-transition-easing);
+  left: 0;
+}
+
+//------ variants ------//
+
+.vex-tabs.--variant-switch {
+  background-color: var(--vex-c-neutral-100);
+
+  .vex-tabs-pointer {
+    background-color: white;
+    border-radius: 0px;
+  }
+}
+
+.vex-tabs.--variant-underline {
+  .vex-tabs-pointer {
+    background-color: var(--vex-c-primary-500);
+    border-radius: 0;
+  }
+}
+
+//------ orientation ------//
+
+.vex-tabs.--orientation-horizontal {
+  flex-direction: row;
+
+  .vex-tabs-pointer {
+    bottom: 8px;
+    width: 10px;
+    transform-origin: 0% 50%;
+  }
+
+  &.--variant-switch {
+    .vex-tabs-pointer {
+      height: calc(100% - 8px);
+    }
+  }
+
+  &.--variant-underline {
+    .vex-tabs-pointer {
+      height: 2px;
+    }
+  }
+}
+
+.vex-tabs.--orientation-vertical {
+  flex-direction: column;
+
+  .vex-tabs-pointer {
+    top: 0;
+    height: 10px;
+    transform-origin: 50% 0%;
+  }
+
+  &.--variant-switch {
+    .vex-tabs-pointer {
+      width: calc(100% - 8px);
+    }
+  }
+
+  &.--variant-underline {
+    .vex-tabs-pointer {
+      width: 2px;
+    }
+  }
+}

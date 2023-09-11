@@ -1,0 +1,123 @@
+.vex-notification {
+  position: relative;
+
+  display: flex;
+  flex-shrink: 0;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--vex-spacing-2);
+
+  padding: var(--vex-spacing-4);
+  width: 20rem;
+  max-width: calc(100vw - 2rem);
+  overflow: hidden;
+
+  font-size: var(--vex-font-size-xs);
+  border-radius: var(--vex-border-radius-sm);
+  background-color: white;
+  filter: var(--vex-drop-shadow-sm);
+  pointer-events: auto;
+
+  &-custom {
+    pointer-events: auto;
+    position: relative;
+  }
+}
+
+//------ icon ------//
+
+.vex-notification-icon {
+  flex: none;
+}
+
+//------ content ------//
+
+.vex-notification-content {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--vex-spacing-2);
+
+  &-title {
+    text-transform: capitalize;
+    font-weight: bold;
+    font-size: var(--vex-font-size-sm);
+    margin: 0;
+  }
+
+  &-body {
+    margin: 0;
+  }
+}
+
+//------ close button ------//
+
+.vex-notification-close {
+  all: unset;
+  position: absolute;
+  inset-block-start: var(--vex-spacing-2);
+  inset-inline-end: var(--vex-spacing-2);
+
+  padding: var(--vex-spacing-1);
+  width: 18px;
+  height: 18px;
+  box-sizing: border-box;
+
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+  color: var(--vex-text-clr-muted);
+  border-radius: var(--vex-border-radius-rounded);
+
+  &:hover {
+    background-color: var(--vex-c-neutral-100);
+  }
+}
+
+//------ type ------//
+
+.vex-notification.--type-primary {
+  .vex-notification-icon,
+  .vex-notification-content-title {
+    color: var(--vex-c-primary-500);
+  }
+}
+
+.vex-notification.--type-danger {
+  .vex-notification-icon,
+  .vex-notification-content-title {
+    color: var(--vex-c-danger-500);
+  }
+}
+
+.vex-notification.--type-warning {
+  .vex-notification-icon,
+  .vex-notification-content-title {
+    color: var(--vex-c-warning-500);
+  }
+}
+
+.vex-notification.--type-success {
+  .vex-notification-icon,
+  .vex-notification-content-title {
+    color: var(--vex-c-success-500);
+  }
+}
+
+.vex-notification.--type-info {
+  .vex-notification-icon,
+  .vex-notification-content-title {
+    color: var(--vex-c-accent-500);
+  }
+}
+
+//------ progress ------//
+
+.vex-notification-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}

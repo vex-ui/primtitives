@@ -1,0 +1,85 @@
+.vex-tooltip {
+  border-radius: var(--vex-border-radius-sm);
+  color: var(--vex-c-neutral-900);
+  filter: var(--vex-drop-shadow-sm);
+}
+
+//------ content ------//
+
+.vex-tooltip-content {
+  padding: var(--vex-spacing-1) var(--vex-spacing-2);
+  border-radius: inherit;
+  font-size: var(--vex-font-size-sm);
+  white-space: nowrap;
+  width: max-content;
+  background-color: inherit;
+}
+
+//------ arrow ------//
+
+.vex-tooltip-arrow {
+  width: 8px;
+  height: 8px;
+  background-color: inherit;
+  transform: rotate(45deg);
+  border: inherit;
+  z-index: -1;
+}
+
+//------ variant - filled ------//
+
+.vex-tooltip.--variant-filled {
+  &.--c-neutral {
+    background-color: var(--vex-c-neutral-600);
+    color: var(--vex-c-neutral-100);
+  }
+  &.--c-primary {
+    background-color: var(--vex-c-primary-600);
+    color: var(--vex-c-neutral-100);
+  }
+  &.--c-accent {
+    background-color: var(--vex-c-accent-600);
+    color: var(--vex-c-neutral-100);
+  }
+  &.--c-success {
+    background-color: var(--vex-c-success-600);
+    color: var(--vex-c-neutral-100);
+  }
+  &.--c-warning {
+    background-color: var(--vex-c-warning-600);
+    color: var(--vex-c-neutral-100);
+  }
+  &.--c-danger {
+    background-color: var(--vex-c-danger-600);
+    color: var(--vex-c-neutral-100);
+  }
+}
+
+//------ variant - light ------//
+
+.vex-tooltip.--variant-light {
+  &.--c-neutral {
+    background-color: var(--vex-c-neutral-100);
+    color: var(--vex-c-neutral-700);
+  }
+  &.--c-primary {
+    background-color: var(--vex-c-primary-100);
+    color: var(--vex-c-primary-700);
+  }
+  &.--c-accent {
+    background-color: var(--vex-c-accent-100);
+    color: var(--vex-c-accent-700);
+  }
+  &.--c-success {
+    background-color: var(--vex-c-success-100);
+    color: var(--vex-c-success-700);
+  }
+  &.--c-warning {
+    background-color: var(--vex-c-warning-100);
+    color: var(--vex-c-warning-700);
+  }
+  &.--c-danger {
+    background-color: var(--vex-c-danger-100);
+    color: var(--vex-c-danger-700);
+  }
+}

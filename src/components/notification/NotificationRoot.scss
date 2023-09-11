@@ -1,0 +1,28 @@
+.vex-notification-root {
+  position: fixed;
+  z-index: 1000;
+  inset-block-start: 0;
+  inset-inline-start: 0;
+
+  width: 100vw;
+  height: 100vh;
+  padding: var(--vex-spacing-4);
+  box-sizing: border-box;
+  overflow: hidden;
+  pointer-events: none;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-end;
+  gap: var(--vex-spacing-4);
+
+  // scrollbar-width: 0;
+  // &::-webkit-scrollbar {
+  //   display: none;
+  // }
+}
+
+.vex-notification-move-class {
+  transition: transform 300ms ease-out;
+}

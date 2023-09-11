@@ -1,0 +1,26 @@
+.vex-textarea {
+  all: unset;
+  display: block;
+  padding: var(--vex-spacing-4);
+  resize: none;
+  overflow-wrap: break-word;
+
+  border: none;
+  background-color: white;
+  font-family: inherit;
+  outline: 1px solid var(--vex-border-clr-base);
+  border-radius: var(--vex-border-radius-sm);
+  font-size: var(--vex-font-size-sm);
+
+  &:disabled {
+    cursor: not-allowed;
+    background-color: var(--vex-clr-disabled);
+    color: var(--vex-clr-on-disabled);
+    outline-color: transparent;
+  }
+
+  &:focus {
+    outline-width: 2px;
+    outline-color: var(--vex-border-clr-active);
+  }
+}

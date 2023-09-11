@@ -1,0 +1,33 @@
+{
+  "name": "@vex-ui/docs",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "vitepress dev",
+    "build": "vitepress build",
+    "preview": "vitepress preview"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "unocss": "^0.50.8",
+    "vite": "^4.4.2",
+    "vitepress": "1.0.0-alpha.64"
+  },
+  "pnpm": {
+    "peerDependencyRules": {
+      "ignoreMissing": [
+        "@algolia/client-search"
+      ]
+    }
+  },
+  "dependencies": {
+    "@heroicons/vue": "^2.0.18",
+    "@vex-ui/core": "workspace:*",
+    "shiki": "^0.14.3",
+    "typescript": "^5.1.6",
+    "vue": "^3.3.4"
+  }
+}

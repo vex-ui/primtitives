@@ -1,0 +1,28 @@
+:root {
+  --vp-c-brand-lighter: #a78bfa;
+  --vp-c-brand-light: #8b5cf6;
+  --vp-c-brand: #7c3bed;
+  --vp-c-brand-dark: #6d28d9;
+  --vp-c-brand-darker: #5b21b6;
+
+
+}
+
+/* navbar 
+  =================*/
+
+/* Add border bottom instead of shadow */
+
+.VPNav {
+  border-bottom: none;
+}
+
+/* Remove shadow effect on scroll */
+.VPNavBar .curtain {
+  display: none;
+}
+
+/* There's height - 1 in VitePress site for maybe shadow, Use actual height */
+.VPNavBar .content-body {
+  height: var(--vp-nav-height);
+}

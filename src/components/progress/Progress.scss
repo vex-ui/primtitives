@@ -1,0 +1,53 @@
+.vex-progress {
+  position: relative;
+  width: 100%;
+  border-radius: var(--vex-border-radius-md);
+
+  &-bar {
+    position: absolute;
+    inset-block-start: 0;
+    inset-inline-start: 0;
+    height: 100%;
+    border-radius: inherit;
+  }
+}
+
+.vex-progress.--color-primary {
+  background-color: var(--vex-c-primary-100);
+
+  .vex-progress-bar {
+    background-color: var(--vex-c-primary-500);
+  }
+}
+
+.vex-progress.--color-success {
+  background-color: var(--vex-c-success-100);
+
+  .vex-progress-bar {
+    background-color: var(--vex-c-success-500);
+  }
+}
+
+.vex-progress.--color-warning {
+  background-color: var(--vex-c-warning-100);
+
+  .vex-progress-bar {
+    background-color: var(--vex-c-warning-500);
+  }
+}
+
+.vex-progress.--color-danger {
+  background-color: var(--vex-c-danger-100);
+
+  .vex-progress-bar {
+    background-color: var(--vex-c-danger-500);
+  }
+}
+
+.vex-progress.--color-info {
+  background-color: var(--vex-c-accent-100);
+
+  .vex-progress-bar {
+    background-color: var(--vex-c-accent-500);
+  }
+}

@@ -1,0 +1,48 @@
+.vex-option {
+  position: relative;
+  height: var(--vex-spacing-8);
+  font-size: var(--vex-font-size-sm);
+  border-radius: var(--vex-border-radius-sm);
+  display: flex;
+  align-items: stretch;
+  justify-content: start;
+  outline: none;
+
+  // TODO: hover + disabled will still be highlighted, fix it
+  &:hover,
+  &:focus-visible {
+    background-color: var(--vex-c-neutral-100);
+  }
+
+  &.--disabled {
+    opacity: 50%;
+  }
+
+  &-content {
+    flex-grow: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--vex-spacing-4);
+  }
+
+  &-prefix,
+  &-suffix {
+    aspect-ratio: 1/1;
+    height: 100%;
+    flex: none;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &-suffix-chevron,
+  &-prefix-check {
+    width: var(--vex-spacing-3);
+    height: var(--vex-spacing-3);
+  }
+
+  &-prefix-check {
+    color: var(--vex-c-primary-500);
+  }
+}

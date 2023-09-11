@@ -1,0 +1,140 @@
+//------ colors ------//
+
+:root {
+  --vex-c-neutral-100: #f5f5f5;
+  --vex-c-neutral-200: #e5e5e5;
+  --vex-c-neutral-300: #d4d4d4;
+  --vex-c-neutral-400: #a3a3a3;
+  --vex-c-neutral-500: #737373;
+  --vex-c-neutral-600: #525252;
+  --vex-c-neutral-700: #404040;
+  --vex-c-neutral-800: #262626;
+  --vex-c-neutral-900: #171717;
+
+  --vex-c-primary-100: #f4f4f5;
+  --vex-c-primary-200: #e4e4e7;
+  --vex-c-primary-300: #d4d4d8;
+  --vex-c-primary-400: #303033;
+  --vex-c-primary-500: #18181b;
+  --vex-c-primary-600: #18181b;
+  --vex-c-primary-700: #18181b;
+  --vex-c-primary-800: #18181b;
+  --vex-c-primary-900: #18181b;
+
+  --vex-c-accent-100: #ede9fe;
+  --vex-c-accent-200: #ddd6fe;
+  --vex-c-accent-300: #c4b5fd;
+  --vex-c-accent-400: #a78bfa;
+  --vex-c-accent-500: #8b5cf6;
+  --vex-c-accent-600: #7c3aed;
+  --vex-c-accent-700: #6d28d9;
+  --vex-c-accent-800: #5b21b6;
+  --vex-c-accent-900: #4c1d95;
+
+  --vex-c-danger-100: #fee2e2;
+  --vex-c-danger-200: #fecaca;
+  --vex-c-danger-300: #fca5a5;
+  --vex-c-danger-400: #f87171;
+  --vex-c-danger-500: #ef4444;
+  --vex-c-danger-600: #dc2626;
+  --vex-c-danger-700: #b91c1c;
+  --vex-c-danger-800: #991b1b;
+  --vex-c-danger-900: #7f1d1d;
+
+  --vex-c-warning-100: #ffedd5;
+  --vex-c-warning-200: #fed7aa;
+  --vex-c-warning-300: #fdba74;
+  --vex-c-warning-400: #fb923c;
+  --vex-c-warning-500: #f97316;
+  --vex-c-warning-600: #ea580c;
+  --vex-c-warning-700: #c2410c;
+  --vex-c-warning-800: #9a3412;
+  --vex-c-warning-900: #7c2d12;
+
+  --vex-c-success-100: #dcfce7;
+  --vex-c-success-200: #bbf7d0;
+  --vex-c-success-300: #86efac;
+  --vex-c-success-400: #4ade80;
+  --vex-c-success-500: #22c55e;
+  --vex-c-success-600: #16a34a;
+  --vex-c-success-700: #15803d;
+  --vex-c-success-800: #166534;
+  --vex-c-success-900: #14532d;
+}
+
+//------ spacing ------//
+
+:root {
+  --vex-spacing-0: 0px;
+  --vex-spacing-px: 1px;
+  --vex-spacing-2px: 2px;
+  --vex-spacing-1: 0.25rem;
+  --vex-spacing-2: 0.5rem;
+  --vex-spacing-3: 0.75rem;
+  --vex-spacing-4: 1rem;
+  --vex-spacing-5: 1.25rem;
+  --vex-spacing-6: 1.5rem;
+  --vex-spacing-7: 1.75rem;
+  --vex-spacing-8: 2rem;
+  --vex-spacing-9: 2.25rem;
+  --vex-spacing-10: 2.5rem;
+  --vex-spacing-11: 2.75rem;
+  --vex-spacing-12: 3rem;
+  --vex-spacing-13: 3.5rem;
+  --vex-spacing-14: 4rem;
+  --vex-spacing-15: 5rem;
+  --vex-spacing-16: 6rem;
+  --vex-spacing-17: 7rem;
+  --vex-spacing-18: 8rem;
+  --vex-spacing-19: 9rem;
+  --vex-spacing-20: 10rem;
+  --vex-spacing-21: 12rem;
+  --vex-spacing-22: 14rem;
+  --vex-spacing-23: 17rem;
+  --vex-spacing-24: 20rem;
+}
+
+//------ font ------//
+
+:root {
+  --vex-font-size-xs: 0.75rem;
+  --vex-font-size-sm: 0.875rem;
+  --vex-font-size-md: 1rem;
+  --vex-font-size-lg: 2rem;
+}
+
+//------ border ------//
+
+:root {
+  --vex-border-radius-sm: 4px;
+  --vex-border-radius-md: 8px;
+  --vex-border-radius-lg: 16px;
+  --vex-border-radius-none: 0px;
+  --vex-border-radius-full: 99999px;
+
+  --vex-border-clr-base: var(--vex-c-neutral-200);
+  --vex-border-clr-active: var(--vex-c-primary-500);
+}
+
+//------ elevation ------//
+
+:root {
+  --vex-box-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 0 1px rgba(0, 0, 0, 0.1);
+  --vex-box-shadow-md: 0 1px 6px 0px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --vex-box-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+
+  --vex-drop-shadow-sm: drop-shadow(0 1px 1px rgba(0, 0, 0, 0.15));
+  --vex-drop-shadow-md: drop-shadow(0 1px 3px rgba(0, 0, 0, 0.2));
+}
+
+//------ transition ------//
+
+:root {
+  --vex-transition-easing: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+//------ z-index ------//
+
+:root {
+  --vex-z-toast: 1000;
+}

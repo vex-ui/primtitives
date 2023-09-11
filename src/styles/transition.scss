@@ -1,0 +1,10 @@
+.vex-fade-enter-active,
+.vex-fade-leave-active {
+  transition: opacity 300ms ease;
+  pointer-events: none;
+}
+
+.vex-fade-enter-from,
+.vex-fade-leave-to {
+  opacity: 0;
+}

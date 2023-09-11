@@ -1,0 +1,58 @@
+.vex-table-wrapper {
+  border-radius: var(--vex-border-radius-md);
+  font-size: var(--vex-font-size-sm);
+  display: flex;
+  overflow: auto;
+  height: 500px;
+  width: 100%;
+
+  .vex-table {
+    border-collapse: collapse;
+    flex-grow: 1;
+  }
+
+  .vex-table-caption {
+    font-size: var(--vex-font-size-md);
+    white-space: nowrap;
+    width: max-content;
+  }
+}
+
+.vex-table-head {
+  position: sticky;
+  left: 0;
+  top: 0;
+  filter: var(--vex-drop-shadow-sm);
+  background-color: white;
+
+  &-row {
+    &-cell {
+      text-align: center;
+      font-weight: 400;
+      padding: 1rem;
+      white-space: nowrap;
+      cursor: pointer;
+
+      &:hover {
+        background-color: var(--vex-c-neutral-100);
+      }
+
+      &:active {
+        background-color: var(--vex-c-neutral-200);
+      }
+    }
+  }
+}
+
+.vex-table-body {
+  &-row {
+    &:nth-child(even) {
+      background-color: var(--vex-c-neutral-100);
+    }
+
+    &-cell {
+      padding: 1rem;
+      white-space: nowrap;
+    }
+  }
+}

@@ -1,0 +1,23 @@
+.vex-breadcrumb {
+  display: flex;
+  align-items: center;
+
+  & a {
+    text-decoration: none;
+  }
+
+  & > *:last-child {
+    color: var(--vex-c-primary-500);
+  }
+
+  & > *:not(:last-child) {
+    color: var(--vex-on-surface-muted);
+
+    &::after {
+      content: '/';
+      font-size: var(--vex-font-size-sm);
+      margin-inline: var(--vex-spacing-4);
+      pointer-events: none;
+    }
+  }
+}

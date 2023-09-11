@@ -1,0 +1,186 @@
+.vex-button {
+  flex-shrink: 0;
+  appearance: none;
+  position: relative;
+  padding: 0;
+  padding-inline: var(--vex-spacing-4);
+  height: 2.25rem;
+  overflow: hidden;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  outline: 2px solid transparent;
+  border-radius: var(--vex-border-radius-sm);
+  cursor: pointer;
+  line-height: 1;
+  font-family: inherit;
+  font-weight: 500;
+  font-size: var(--vex-font-size-sm);
+  transition-property: background, color;
+  transition-duration: 150ms;
+  transition-timing-function: var(--vex-transition-easing);
+  white-space: nowrap;
+  text-transform: capitalize;
+  -webkit-tap-highlight-color: transparent;
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 50%;
+  }
+
+  &:focus-visible {
+    outline-color: var(--vex-c-primary-500);
+  }
+
+  &-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    gap: var(--vex-spacing-2);
+  }
+
+  &.--loading {
+    opacity: 50%;
+    pointer-events: none;
+
+    .vex-button-content {
+      visibility: hidden;
+    }
+  }
+
+  &.--compact {
+    height: 1.75rem;
+    font-size: var(--vex-font-size-xs);
+    padding-inline: var(--vex-spacing-2);
+  }
+
+  &.--icon-only {
+    aspect-ratio: 1/1;
+    padding-inline: 0 !important;
+  }
+}
+
+//------ normal button ------//
+
+.vex-button.--variant-filled {
+  background-color: var(--vex-c-primary-500);
+  color: white;
+  outline-offset: 2px;
+  border: none;
+
+  &:enabled:hover {
+    background-color: var(--vex-c-primary-400);
+  }
+
+  &:enabled:active {
+    background-color: var(--vex-c-primary-600);
+  }
+}
+
+.vex-button.--variant-light {
+  background-color: var(--vex-c-primary-100);
+  color: var(--vex-clr-on-primary-800);
+  border: none;
+
+  &:enabled:active {
+    background-color: var(--vex-c-primary-200);
+  }
+}
+
+.vex-button.--variant-outline {
+  background-color: transparent;
+  color: var(--vex-c-primary-600);
+  border: 1px solid var(--vex-border-clr-base);
+
+  &:enabled:hover {
+    background-color: var(--vex-c-primary-100);
+  }
+
+  &:enabled:active {
+    background-color: var(--vex-c-primary-200);
+  }
+
+  &:focus-visible {
+    border-color: transparent;
+  }
+}
+
+.vex-button.--variant-text {
+  background-color: transparent;
+  color: var(--vex-c-primary-600);
+  border: none;
+
+  &:enabled:hover {
+    background-color: var(--vex-c-primary-100);
+  }
+
+  &:enabled:active {
+    background-color: var(--vex-c-primary-200);
+  }
+}
+
+//------ destructive button ------//
+
+.vex-button.--destructive {
+  &:focus-visible {
+    outline-color: var(--vex-c-danger-500);
+  }
+
+  &.--variant-filled {
+    background-color: var(--vex-c-danger-500);
+    color: white;
+    outline-offset: 2px;
+    border: none;
+
+    &:enabled:hover {
+      background-color: var(--vex-c-danger-400);
+    }
+
+    &:enabled:active {
+      background-color: var(--vex-c-danger-600);
+    }
+  }
+
+  &.--variant-light {
+    background-color: var(--vex-c-danger-100);
+    color: var(--vex-c-danger-800);
+    border: none;
+
+    &:enabled:active {
+      background-color: var(--vex-c-danger-200);
+    }
+  }
+
+  &.--variant-outline {
+    background-color: transparent;
+    color: var(--vex-c-danger-600);
+    border: 1px solid var(--vex-border-clr-base);
+
+    &:enabled:hover {
+      background-color: var(--vex-c-danger-100);
+    }
+
+    &:enabled:active {
+      background-color: var(--vex-c-danger-200);
+    }
+
+    &:focus-visible {
+      border-color: transparent;
+    }
+  }
+
+  &.--variant-text {
+    background-color: transparent;
+    color: var(--vex-c-danger-600);
+    border: none;
+
+    &:enabled:hover {
+      background-color: var(--vex-c-danger-100);
+    }
+
+    &:enabled:active {
+      background-color: var(--vex-c-danger-200);
+    }
+  }
+}

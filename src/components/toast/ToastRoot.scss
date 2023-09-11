@@ -1,0 +1,25 @@
+.vex-toast-root {
+  position: fixed;
+  z-index: var(--vex-z-toast);
+  top: 0;
+  right: 0;
+
+  width: 100vw;
+  height: 100vh;
+  padding: var(--vex-spacing-4);
+  margin: 0;
+  box-sizing: border-box;
+  overflow-x: hidden;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: var(--vex-spacing-4);
+
+  pointer-events: none;
+}
+
+.vex-toast-move-class {
+  transition: transform 300ms ease-out;
+}

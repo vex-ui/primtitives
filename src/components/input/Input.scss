@@ -1,0 +1,104 @@
+.vex-field {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  height: 2.5rem;
+  font-size: var(--vex-font-size-sm);
+
+  &.--with-icon &-input {
+    padding-inline-start: 2.5rem;
+  }
+
+  &.--with-suffix &-input {
+    padding-inline-end: 2.5rem;
+  }
+}
+
+//------ input ------//
+
+.vex-field-input {
+  all: unset;
+  width: 100%;
+  min-width: 0;
+  border-style: none;
+  outline: 1px solid var(--vex-border-clr-base);
+  border-radius: var(--vex-border-radius-sm);
+  transition-property: color, background-color, border-color, outline-color;
+  transition-timing-function: var(--vex-transition-easing);
+  transition-duration: 150ms;
+  padding-inline: var(--vex-spacing-4);
+  background-color: white;
+  display: block;
+
+  &[type='button'] {
+    text-align: start;
+  }
+
+  &:disabled {
+    background-color: var(--vex-clr-disabled);
+    color: var(--vex-clr-on-disabled);
+    outline-color: transparent !important;
+    cursor: not-allowed !important;
+  }
+
+  &:focus {
+    outline-color: var(--vex-border-clr-active);
+    outline-width: 2px;
+  }
+
+  // &:invalid {
+  //   outline-color: var(--vex-c-danger-500);
+  // }
+}
+
+//------ icon & suffix ------//
+
+.vex-field-suffix,
+.vex-field-icon {
+  aspect-ratio: 1/1;
+  height: 100%;
+  gap: var(--vex-spacing-2);
+  position: absolute;
+  inset-block-start: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  font-size: var(--vex-font-size-xs);
+  color: var(--vex-text-clr-muted);
+
+  .vex-field-input:focus ~ & {
+    color: var(--vex-c-primary-500);
+  }
+  // .vex-field-input:invalid ~ & {
+  //   color: var(--vex-c-danger-500);
+  // }
+}
+
+.vex-field-icon {
+  inset-inline-start: 0;
+}
+.vex-field-suffix {
+  inset-inline-end: 0;
+}
+
+//------ compact ------//
+
+.vex-field.--compact {
+  $field-height: 2rem;
+
+  height: $field-height;
+  font-size: var(--vex-font-size-xs);
+
+  .vex-field-input {
+    padding-inline: var(--vex-spacing-3);
+  }
+
+  &.--with-icon .vex-field-input {
+    padding-inline-start: $field-height;
+  }
+
+  &.--with-suffix .vex-field-input {
+    padding-inline-end: $field-height;
+  }
+}

@@ -1,0 +1,13 @@
+.vex-upload-dropzone {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  border: 1px dotted var(--vex-border-clr-base);
+  border-radius: var(--vex-border-radius-md);
+  transition: border-color 150ms;
+
+  &:hover {
+    border-color: var(--vex-border-clr-active);
+  }
+}

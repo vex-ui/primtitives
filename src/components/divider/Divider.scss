@@ -1,0 +1,34 @@
+.vex-divider {
+  border-width: 0;
+  flex-shrink: 0;
+  position: relative;
+
+  &-content {
+    position: absolute;
+    inset-block-start: 50%;
+    inset-inline-start: 50%;
+    transform: translate(-50%, -50%);
+    padding-inline: var(--vex-spacing-1);
+    font-size: var(--vex-font-size-xs);
+    color: var(--vex-text-clr-muted);
+    background: white;
+  }
+
+  &:not(.--vertical) {
+    height: 0;
+    border-top: 1px solid var(--vex-border-clr-base);
+    display: block;
+    margin-block: var(--vex-spacing-1);
+  }
+
+  &.--vertical {
+    width: 0;
+    height: 100%;
+    border-left: 1px solid var(--vex-border-clr-base);
+    display: inline-block;
+    // TODO: vertical text impl
+    margin-inline: var(--vex-spacing-1);
+    writing-mode: vertical-lr;
+    vertical-align: middle;
+  }
+}

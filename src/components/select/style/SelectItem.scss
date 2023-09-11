@@ -1,0 +1,29 @@
+.vex-select-item {
+  min-height: 2rem;
+  min-width: max-content;
+  display: flex;
+  cursor: pointer;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--vex-spacing-2);
+  transition-property: color, background-color;
+  transition-timing-function: var(--vex-transition-easing);
+  transition-duration: 150ms;
+  border-radius: var(--vex-border-radius-md);
+  padding: 0;
+  padding-inline: var(--vex-spacing-3);
+
+  &:not([inert]):hover {
+    background-color: var(--vex-c-neutral-100);
+  }
+
+  &[inert] {
+    color: var(--vex-clr-on-disabled);
+    cursor: not-allowed;
+  }
+
+  &.--selected {
+    background-color: var(--vex-c-neutral-100);
+    color: var(--vex-c-primary-500);
+  }
+}

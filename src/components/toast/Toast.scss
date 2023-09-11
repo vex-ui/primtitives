@@ -1,0 +1,32 @@
+.vex-toast {
+  display: flex;
+  align-items: center;
+  gap: var(--vex-spacing-2);
+
+  height: 2rem;
+  padding: 0 var(--vex-spacing-3);
+
+  border-radius: var(--vex-border-radius-sm);
+  font-size: var(--vex-font-size-sm);
+  filter: var(--vex-drop-shadow-sm);
+  background-color: white;
+  pointer-events: auto;
+}
+
+//------ color ------//
+
+.vex-toast.--c-primary {
+  color: var(--vex-c-primary-600);
+}
+.vex-toast.--c-accent {
+  color: var(--vex-c-accent-600);
+}
+.vex-toast.--c-success {
+  color: var(--vex-c-success-600);
+}
+.vex-toast.--c-warning {
+  color: var(--vex-c-warning-600);
+}
+.vex-toast.--c-danger {
+  color: var(--vex-c-danger-600);
+}

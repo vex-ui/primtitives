@@ -1,0 +1,50 @@
+//------ group ------//
+
+.vex-chip-group {
+  display: flex;
+  flex-wrap: wrap;
+  padding: var(--vex-spacing-1);
+  gap: var(--vex-spacing-2);
+}
+
+//------ chip ------//
+
+.vex-chip {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+
+  padding: 0 var(--vex-spacing-3);
+  height: 2rem;
+
+  font-size: var(--vex-font-size-sm);
+  color: var(--vex-text-clr-default);
+  background-color: transparent;
+
+  border-radius: var(--vex-border-radius-full);
+  border: 1px solid var(--vex-border-clr-base);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+
+  &.--checked {
+    background-color: var(--vex-c-primary-200);
+    color: var(--vex-c-primary-500);
+    border-color: transparent;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--vex-border-clr-active);
+  }
+}
+
+//------ content ------//
+
+.vex-chip-content {
+  padding-inline: var(--vex-spacing-1);
+}
+//------ check icon ------//
+
+.vex-chip-check {
+  width: 18px;
+  height: 18px;
+}
