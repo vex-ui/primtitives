@@ -8,7 +8,7 @@ interface Options<T> {
   setter?: (newValue: T) => T
 }
 
-export function useControllableState<T>(getter: Getter<T>, options: Options<T>): Ref<T> {
+export function useControllableState<T>(getter: Getter<T>, options: Options<T> = {}): Ref<T> {
   const { propName = 'modeValue', setter } = options
 
   return hasVModelBound(propName)
