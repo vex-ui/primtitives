@@ -9,9 +9,10 @@ interface Options<T> {
 }
 
 export function useControllableState<T>(getter: Getter<T>, options: Options<T> = {}): Ref<T> {
-  const { propName = 'modeValue', setter } = options
+  const { propName = 'modelValue', setter } = options
+  const isControlled = hasVModelBound(propName)
 
-  return hasVModelBound(propName)
+  return isControlled
     ? useVModel(getter, { eventName: `update:${propName}`, setter })
     : shallowRef(getter())
 }
