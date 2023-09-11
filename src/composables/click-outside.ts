@@ -1,5 +1,5 @@
 import type { Fn, MaybeRefOrGetter, TemplateRef } from '@/types'
-import { isWatchable, remove } from '@/utils'
+import { isClient, isWatchable, remove } from '@/utils'
 import { EffectScope, effectScope, onScopeDispose, toValue, watch } from 'vue'
 import { isIOS, noop } from './helpers'
 
@@ -20,7 +20,7 @@ interface Options {
  * @returns cleanupFn
  */
 export function useClickOutside(source: TemplateRef, cb: Listener, options: Options = {}): Fn {
-  if (!window) return noop
+  if (!isClient) return noop
 
   const { ignore = [], isActive = true } = options
   const initiallyActive = toValue(isActive)
