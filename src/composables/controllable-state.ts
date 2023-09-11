@@ -3,21 +3,26 @@ import { getCurrentInstance, shallowRef, type Ref } from 'vue'
 import { getKebabCase } from './helpers'
 import { useVModel } from './v-model'
 
-type Options = {
-  name?: string
+interface Options<T> {
+  propName?: string
+  setter?: (newValue: T) => T
 }
 
-export function useControllableState<T>(prop: Getter<T>, { name = 'modelValue' }: Options): Ref<T> {
+export function useControllableState<T>(getter: Getter<T>, options: Options<T>): Ref<T> {
+  const { propName = 'modeValue', setter } = options
+
+  return hasVModelBound(propName)
+    ? useVModel(getter, { eventName: `update:${propName}`, setter })
+    : shallowRef(getter())
+}
+
+function hasVModelBound(propName: string) {
   const vm = getCurrentInstance()
-  const kebabName = getKebabCase(name)
-  const isControlled =
-    (vm?.vnode.props?.hasOwnProperty(name) || vm?.vnode.props?.hasOwnProperty(kebabName)) &&
-    (vm.vnode.props?.hasOwnProperty(`onUpdate:${name}`) ||
-      vm.vnode.props?.hasOwnProperty(`onUpdate:${kebabName}`))
+  const kebabPropName = getKebabCase(propName)
 
-  if (isControlled) {
-    return useVModel(prop, { eventName: `update:${name}` })
-  }
-
-  return shallowRef(prop())
+  return (
+    (vm?.vnode.props?.hasOwnProperty(propName) || vm?.vnode.props?.hasOwnProperty(kebabPropName)) &&
+    (vm.vnode.props?.hasOwnProperty(`onUpdate:${propName}`) ||
+      vm.vnode.props?.hasOwnProperty(`onUpdate:${kebabPropName}`))
+  )
 }
