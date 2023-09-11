@@ -5,7 +5,6 @@ import { resolve } from 'path'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import Unocss from 'unocss/vite'
 import VueDevTools from 'vite-plugin-vue-devtools'
 import { transformLazyShow } from 'v-lazy-show'
 
@@ -16,7 +15,6 @@ export default defineConfig({
     vue({ template: { compilerOptions: { nodeTransforms: [transformLazyShow] } } }),
     vueJsx(),
     // dts(),
-    Unocss(),
   ],
   build: {
     lib: {

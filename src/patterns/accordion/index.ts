@@ -1,5 +1,0 @@
-export { default as AccordionLight } from './AccordionLight.vue'
-export { default as AccordionLadder } from './AccordionLadder.vue'
-export { default as AccordionOutline } from './AccordionOutline.vue'
-export { default as AccordionDefaultUno } from './AccordionDefaultUno.vue'
-export { default as AccordionDefaultCss } from './AccordionDefaultCss.vue'

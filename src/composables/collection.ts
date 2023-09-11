@@ -41,3 +41,6 @@ export function createCollection<T extends HTMLElement = HTMLElement>(collection
     remove,
   }
 }
+
+// FIXME: remove this
+export const useCollection = () => {}
