@@ -1,8 +1,14 @@
-import { useContext, useID, useSelectionGroup, type SelectionGroup } from '@/composables'
+import {
+  useContext,
+  useControllableState,
+  useID,
+  useSelectionGroup,
+  type SelectionGroup,
+} from '@/composables'
 import type { Getter } from '@/types'
 import { computedEager } from '@vueuse/core'
-import type { InjectionKey, Ref, SlotsType } from 'vue'
-import { defineComponent, h, provide, ref } from 'vue'
+import type { InjectionKey, PropType, Ref, SlotsType } from 'vue'
+import { defineComponent, h, provide } from 'vue'
 
 type Value = string
 
@@ -32,19 +38,24 @@ function useAccordionItemCtx(component: string) {
 
 const Accordion = defineComponent({
   setup(p, { slots }) {
-    // TODO: make state controllable from the outside
-    const group = useSelectionGroup<Value>(ref([]), {
-      multiselect: () => p.multiple,
-      deselection: () => true,
-    })
+    const group = useSelectionGroup<Value>(
+      useControllableState(() => p.modelValue ?? []),
+      {
+        multiselect: () => p.multiple,
+        deselection: () => true,
+      }
+    )
 
     provide(ACCORDION_INJECTION_KEY, { group })
     return () => h('div', null, slots.default?.())
   },
 
+  name: 'Accordion',
   props: {
     multiple: Boolean,
+    modelValue: Array as PropType<Value[]>,
   },
+  emits: ['update:modelValue'],
 })
 
 //----------------------------------------------------------------------------------------------------
@@ -57,7 +68,7 @@ const AccordionItem = defineComponent({
 
     const contentID = useID()
     const triggerID = useID()
-    const value = triggerID
+    const value = p.value ?? triggerID
 
     if (p.initiallyExpanded) {
       group.select(value)
@@ -85,6 +96,7 @@ const AccordionItem = defineComponent({
       )
   },
 
+  name: 'AccordionItem',
   props: {
     /**
      * expands the item and prevents it from being collapsed
@@ -98,6 +110,10 @@ const AccordionItem = defineComponent({
      * prevents the item from being collapsed/expanded
      */
     disabled: Boolean,
+    /**
+     * used for controlled state
+     */
+    value: String,
   },
   slots: Object as SlotsType<{
     default: { expanded: boolean }
@@ -127,6 +143,8 @@ const AccordionTrigger = defineComponent({
         slots.default?.()
       )
   },
+
+  name: 'AccordionTrigger',
 })
 
 //----------------------------------------------------------------------------------------------------
@@ -148,6 +166,8 @@ const AccordionContent = defineComponent({
         slots.default?.()
       )
   },
+
+  name: 'AccordionContent',
 })
 
 //----------------------------------------------------------------------------------------------------
