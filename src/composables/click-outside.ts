@@ -1,13 +1,12 @@
 import type { Fn, MaybeRefOrGetter, TemplateRef } from '@/types'
-import { isClient, isWatchable, remove } from '@/utils'
-import { EffectScope, effectScope, onScopeDispose, toValue, watch } from 'vue'
-import { isIOS, noop } from './helpers'
+import { isClient, isIOS, isWatchable, noop, remove } from '@/utils'
+import { onScopeDispose, toValue, watch } from 'vue'
 
 interface Options {
   /**
    * List of elements that should not trigger the event.
    */
-  ignore?: MaybeRefOrGetter<TemplateRef[]>
+  ignore?: MaybeRefOrGetter<(HTMLElement | null)[]>
   /**
    * whether the listener is Active, use it to temporarily remove the listener.
    * @defaultValue true
@@ -23,34 +22,24 @@ export function useClickOutside(source: TemplateRef, cb: Listener, options: Opti
   if (!isClient) return noop
 
   const { ignore = [], isActive = true } = options
-  const initiallyActive = toValue(isActive)
-
-  const shouldIgnore = (e: PointerEvent): boolean =>
-    toValue(ignore).some((ref) => isTargetInsideElement(e, ref))
-
-  let isClickOutside = true
+  let shouldIgnore = false
 
   const onClick = (e: PointerEvent): void => {
-    if (isTargetInsideElement(e, source)) {
-      return
-    }
+    if (!source.value || isElementInsideComposedPath(e, source.value)) return
 
     if (e.detail === 0) {
-      isClickOutside = !shouldIgnore(e)
+      shouldIgnore = toValue(ignore).some((el) => el && isElementInsideComposedPath(e, el))
     }
 
-    isClickOutside && cb(e)
+    if (!shouldIgnore) cb(e)
   }
 
-  let unregister = initiallyActive ? registerListener(onClick) : noop
+  let unregister = toValue(isActive) ? registerListener(onClick) : noop
 
   if (isWatchable(isActive)) {
-    watch(isActive, (isActive) => {
-      if (isActive) {
-        unregister = registerListener(onClick)
-      } else {
-        unregister()
-      }
+    watch(isActive, (active) => {
+      if (active) unregister = registerListener(onClick)
+      else unregister()
     })
   }
 
@@ -59,7 +48,7 @@ export function useClickOutside(source: TemplateRef, cb: Listener, options: Opti
 }
 
 //----------------------------------------------------------------------------------------------------
-// 📌 shared listener
+// 📌 Global Click Event Listener
 //
 // The idea is to have a single shared window listener that automatically removes itself
 // when there are no active listeners in the array, the window listener should loop through
@@ -68,26 +57,25 @@ export function useClickOutside(source: TemplateRef, cb: Listener, options: Opti
 
 type Listener = (e: PointerEvent) => void
 
-let scope: EffectScope | null
 const listeners: Listener[] = []
+let removeWindowListener = noop
+let isWindowListenerAttached = false
 
 function registerListener(listener: Listener) {
   listeners.push(listener)
 
-  if (!scope) {
-    scope = effectScope(true)
-    scope.run(() => {
-      useWindowEventListener((e: PointerEvent) => {
-        listeners.forEach((listener) => listener(e))
-      })
+  if (!isWindowListenerAttached) {
+    removeWindowListener = useWindowEventListener((e: PointerEvent) => {
+      listeners.forEach((listener) => listener(e))
     })
+    isWindowListenerAttached = true
   }
 
   return () => {
     remove(listeners, listener)
-    if (scope && !listeners.length) {
-      scope.stop()
-      scope = null
+    if (!listeners.length) {
+      removeWindowListener()
+      isWindowListenerAttached = false
     }
   }
 }
@@ -100,9 +88,7 @@ function useWindowEventListener(listener: Listener) {
   useIosWorkaround()
 
   window.addEventListener('pointerdown', listener, { passive: true, capture: true })
-  onScopeDispose(() => {
-    window.removeEventListener('pointerdown', listener, { capture: true })
-  })
+  return () => window.removeEventListener('pointerdown', listener, { capture: true })
 }
 
 // See: https://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
@@ -110,11 +96,10 @@ let isIOSWorkaroundActive = false
 function useIosWorkaround() {
   if (!isIOSWorkaroundActive && isIOS) {
     isIOSWorkaroundActive = true
-    Array.from(window.document.body.children).forEach((el) => el.addEventListener('click', noop))
+    Array.from(document.body.children).forEach((el) => el.addEventListener('click', noop))
   }
 }
 
-function isTargetInsideElement(e: PointerEvent, templateRef: TemplateRef) {
-  const el = templateRef.value
-  return el && (e.target === el || e.composedPath().includes(el))
+function isElementInsideComposedPath(e: PointerEvent, el: HTMLElement) {
+  return e.target === el || e.composedPath().includes(el)
 }
