@@ -44,7 +44,6 @@ describe('useClickOutside', () => {
       // Check if the callback has not been called
     })
 
-    // Test when the source element is dynamically updated
     it('should update the source element and still call the callback when a click happens outside the updated source element', () => {
       // Mount the component with an initial source element
       // Trigger a click event outside the initial source element
@@ -54,7 +53,6 @@ describe('useClickOutside', () => {
       // Check if the callback has been called
     })
 
-    // Test when the ignore list is dynamically updated
     it('should update the ignore list and not call the callback when a click happens on an element in the updated ignore list', () => {
       // Mount the component with an initial ignore list
       // Trigger a click event on an element in the initial ignore list
@@ -64,7 +62,6 @@ describe('useClickOutside', () => {
       // Check if the callback has not been called
     })
 
-    // Test when the callback function is dynamically updated
     it('should update the callback function and call the updated callback when a click happens outside the source element', () => {
       // Mount the component with an initial callback function
       // Trigger a click event outside the source element
@@ -74,63 +71,54 @@ describe('useClickOutside', () => {
       // Check if the updated callback has been called
     })
 
-    // Test when the callback function is not provided
     it('should not throw an error when the callback function is not provided', () => {
       // Mount the component without providing a callback function
       // Trigger a click event outside the source element
       // Check if no error is thrown
     })
 
-    // Test when the source element is not provided
     it('should not throw an error when the source element is not provided', () => {
       // Mount the component without providing a source element
       // Trigger a click event outside the source element
       // Check if no error is thrown
     })
 
-    describe('useClickOutside', () => {
-      // Test when the source element is nested inside another element
-      it('should call the callback when a click happens outside the nested source element', () => {
-        // Mount the component with a nested source element
-        // Trigger a click event outside the nested source element
-        // Check if the callback has been called
-      })
+    it('should call the callback when a click happens outside the nested source element', () => {
+      // Mount the component with a nested source element
+      // Trigger a click event outside the nested source element
+      // Check if the callback has been called
+    })
 
-      // Test when the ignore list contains nested elements
-      it('should not call the callback when a click happens on a nested element in the ignore list', () => {
-        // Mount the component with an ignore list that contains nested elements
-        // Trigger a click event on a nested element in the ignore list
-        // Check if the callback has not been called
-      })
+    it('should not call the callback when a click happens on a nested element in the ignore list', () => {
+      // Mount the component with an ignore list that contains nested elements
+      // Trigger a click event on a nested element in the ignore list
+      // Check if the callback has not been called
+    })
 
-      // Test when the callback function is an asynchronous function
-      it('should call the asynchronous callback function when a click happens outside the source element', () => {
-        // Mount the component with an asynchronous callback function
-        // Trigger a click event outside the source element
-        // Wait for the asynchronous callback to complete
-        // Check if the callback has been called
-      })
+    it('should call the asynchronous callback function when a click happens outside the source element', () => {
+      // Mount the component with an asynchronous callback function
+      // Trigger a click event outside the source element
+      // Wait for the asynchronous callback to complete
+      // Check if the callback has been called
+    })
 
-      // Test when the source element is dynamically removed and added back
-      it('should call the callback when a click happens outside the source element after it is removed and added back', () => {
-        // Mount the component with a source element
-        // Trigger a click event outside the source element
-        // Check if the callback has been called
-        // Remove the source element from the DOM
-        // Add the source element back to the DOM
-        // Trigger a click event outside the source element
-        // Check if the callback has been called
-      })
+    it('should call the callback when a click happens outside the source element after it is removed and added back', () => {
+      // Mount the component with a source element
+      // Trigger a click event outside the source element
+      // Check if the callback has been called
+      // Remove the source element from the DOM
+      // Add the source element back to the DOM
+      // Trigger a click event outside the source element
+      // Check if the callback has been called
+    })
 
-      // Test when the ignore list is dynamically cleared
-      it('should call the callback when a click happens outside the source element after the ignore list is cleared', () => {
-        // Mount the component with an ignore list
-        // Trigger a click event on an element in the ignore list
-        // Check if the callback has not been called
-        // Clear the ignore list
-        // Trigger a click event outside the source element
-        // Check if the callback has been called
-      })
+    it('should call the callback when a click happens outside the source element after the ignore list is cleared', () => {
+      // Mount the component with an ignore list
+      // Trigger a click event on an element in the ignore list
+      // Check if the callback has not been called
+      // Clear the ignore list
+      // Trigger a click event outside the source element
+      // Check if the callback has been called
     })
   })
 })
