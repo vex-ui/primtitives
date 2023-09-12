@@ -1,5 +1,6 @@
 export { Alert } from './alert'
 export { Accordion, AccordionItem, AccordionContent, AccordionTrigger } from './accordion'
+export { Collapse } from './collapse'
 // export { Avatar } from './avatar'
 // export { Autocomplete } from './autocomplete'
 // export { Badge } from './badge'
