@@ -38,8 +38,12 @@ export function useClickOutside(source: TemplateRef, cb: Listener, options: Opti
 
   if (isWatchable(isActive)) {
     watch(isActive, (active) => {
-      if (active) unregister = registerListener(onClick)
-      else unregister()
+      if (active) {
+        unregister = registerListener(onClick)
+      } else {
+        unregister()
+        unregister = noop
+      }
     })
   }
 
