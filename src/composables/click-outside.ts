@@ -6,7 +6,7 @@ interface Options {
   /**
    * List of elements that should not trigger the event.
    */
-  ignore?: MaybeRefOrGetter<(HTMLElement | null)[]>
+  ignore?: MaybeRefOrGetter<MaybeRefOrGetter<HTMLElement | null>[]>
   /**
    * whether the listener is Active, use it to temporarily remove the listener.
    * @defaultValue true
@@ -22,16 +22,15 @@ export function useClickOutside(source: TemplateRef, cb: Listener, options: Opti
   if (!isClient) return noop
 
   const { ignore = [], isActive = true } = options
-  let shouldIgnore = false
 
   const onClick = (e: PointerEvent): void => {
-    if (!source.value || isElementInsideComposedPath(e, source.value)) return
+    const shouldIgnore = [source, ...toValue(ignore)].some((ref) => {
+      const el = toValue(ref)
+      return el && isElementInsideComposedPath(e, el)
+    })
 
-    if (e.detail === 0) {
-      shouldIgnore = toValue(ignore).some((el) => el && isElementInsideComposedPath(e, el))
-    }
-
-    if (!shouldIgnore) cb(e)
+    if (shouldIgnore) return
+    cb(e)
   }
 
   let unregister = toValue(isActive) ? registerListener(onClick) : noop
@@ -62,24 +61,24 @@ export function useClickOutside(source: TemplateRef, cb: Listener, options: Opti
 type Listener = (e: PointerEvent) => void
 
 const listeners: Listener[] = []
-let removeWindowListener = noop
-let isWindowListenerAttached = false
+let removeGlobalListener = noop
+let isGlobalListenerAttached = false
 
 function registerListener(listener: Listener) {
   listeners.push(listener)
 
-  if (!isWindowListenerAttached) {
-    removeWindowListener = useWindowEventListener((e: PointerEvent) => {
+  if (!isGlobalListenerAttached) {
+    removeGlobalListener = useWindowEventListener((e: PointerEvent) => {
       listeners.forEach((listener) => listener(e))
     })
-    isWindowListenerAttached = true
+    isGlobalListenerAttached = true
   }
 
   return () => {
     remove(listeners, listener)
     if (!listeners.length) {
-      removeWindowListener()
-      isWindowListenerAttached = false
+      removeGlobalListener()
+      isGlobalListenerAttached = false
     }
   }
 }

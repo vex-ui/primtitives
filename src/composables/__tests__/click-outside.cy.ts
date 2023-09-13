@@ -1,17 +1,14 @@
 import { useClickOutside } from '../click-outside'
-import { ref, nextTick } from 'vue'
-// import { expect, describe, it, vi } from 'cypress/vue'
-import { mount } from '@vue/test-utils'
 
 describe('useClickOutside', () => {
-  beforeEach(() => {
-    cy.visit('/') // replace with your test page URL
-  })
-
   describe('useClickOutside', () => {
     it('should call the callback when a click happens outside the source element', () => {
       // Trigger a click event on the body or any other element that is not the source element or in the ignore list
       // Check if the callback has been called
+      // TODO: implement the test using cypress
+      cy.mount(() => {
+        
+      })
     })
 
     it('should not call the callback when a click happens inside the source element', () => {
