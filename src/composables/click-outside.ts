@@ -30,18 +30,17 @@ export function useClickOutside(target: TemplateRef, listener: Listener, options
   }
 
   let unregister = noop
+  const watchSource = [target, isWatchable(isActive) ? isActive : () => isActive] as const
 
-  if (isWatchable(isActive)) {
-    watch([isActive, target], ([active, target]) => {
-      if (active && target) {
-        window.addEventListener('pointerdown', onClick, { capture: true })
-        unregister = () => window.removeEventListener('pointerdown', onClick, { capture: true })
-      } else {
-        unregister()
-        unregister = noop
-      }
-    })
-  }
+  watch(watchSource, ([target, active]) => {
+    if (active && target) {
+      window.addEventListener('pointerdown', onClick, { capture: true })
+      unregister = () => window.removeEventListener('pointerdown', onClick, { capture: true })
+    } else {
+      unregister()
+      unregister = noop
+    }
+  })
 
   onScopeDispose(unregister)
   return unregister
