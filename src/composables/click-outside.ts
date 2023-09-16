@@ -1,7 +1,6 @@
-import type { MaybeRefOrGetter, TemplateRef } from '@/types'
+import type { Fn, MaybeRefOrGetter, TemplateRef } from '@/types'
 import { isClient, isIOS, isWatchable, noop } from '@/utils'
 import { onScopeDispose, toValue, watch } from 'vue'
-import { useWindowEvent } from './window-event'
 
 type Listener = (e: PointerEvent) => void
 
@@ -30,12 +29,13 @@ export function useClickOutside(target: TemplateRef, listener: Listener, options
     }
   }
 
-  let unregister = toValue(isActive) ? useWindowEvent('pointerdown', onClick) : noop
+  let unregister = noop
 
   if (isWatchable(isActive)) {
-    watch(isActive, (active) => {
-      if (active) {
-        unregister = useWindowEvent('pointerdown', onClick)
+    watch([isActive, target], ([active, target]) => {
+      if (active && target) {
+        window.addEventListener('pointerdown', onClick, { capture: true })
+        unregister = () => window.removeEventListener('pointerdown', onClick, { capture: true })
       } else {
         unregister()
         unregister = noop
@@ -44,7 +44,7 @@ export function useClickOutside(target: TemplateRef, listener: Listener, options
   }
 
   onScopeDispose(unregister)
-  return { stop: unregister }
+  return unregister
 }
 
 // See: https://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
