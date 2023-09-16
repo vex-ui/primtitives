@@ -1,4 +1,4 @@
-import type { Fn, MaybeRefOrGetter, TemplateRef } from '@/types'
+import type { MaybeRefOrGetter, TemplateRef } from '@/types'
 import { isClient, isIOS, isWatchable, noop } from '@/utils'
 import { onScopeDispose, toValue, watch } from 'vue'
 
