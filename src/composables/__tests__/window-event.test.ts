@@ -1,4 +1,4 @@
-import { useWindowEvent, clearMap } from '../window-event'
+import { useWindowEvent, WindowEventsHandler } from '../window-event'
 import { describe, it, expect, vi, beforeEach, afterEach, type SpyInstance } from 'vitest'
 
 describe('useWindowEvent', () => {
@@ -6,7 +6,8 @@ describe('useWindowEvent', () => {
   let removeEventListenerSpy: SpyInstance
 
   beforeEach(() => {
-    clearMap()
+    // @ts-ignore
+    WindowEventsHandler.clearMap()
     addEventListenerSpy = vi.spyOn(window, 'addEventListener')
     removeEventListenerSpy = vi.spyOn(window, 'removeEventListener')
   })
