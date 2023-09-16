@@ -1,4 +1,4 @@
-import type { Fn, MaybeRefOrGetter, TemplateRef } from '@/types'
+import type { MaybeRefOrGetter, TemplateRef } from '@/types'
 import { isClient, isIOS, isWatchable, noop } from '@/utils'
 import { onScopeDispose, toValue, watch } from 'vue'
 import { useWindowEvent } from './window-event'
@@ -6,30 +6,19 @@ import { useWindowEvent } from './window-event'
 type Listener = (e: PointerEvent) => void
 
 interface Options {
-  /**
-   * List of elements that should not trigger the event.
-   */
   ignore?: MaybeRefOrGetter<MaybeRefOrGetter<HTMLElement | null>[]>
-  /**
-   * whether the listener is Active, use it to temporarily remove the listener.
-   * @defaultValue true
-   */
   isActive?: MaybeRefOrGetter<boolean>
 }
 
-/**
- * Listen for clicks outside of an element.
- * @returns cleanupFn
- */
-export function useClickOutside(source: TemplateRef, cb: Listener, options: Options = {}): Fn {
+export function useClickOutside(target: TemplateRef, listener: Listener, options: Options = {}) {
   if (!isClient) return noop
   useIosWorkaround()
 
   const { ignore = [], isActive = true } = options
 
-  const onClick = (e: PointerEvent): void => {
+  const onClick: Listener = (e) => {
     const path = e.composedPath()
-    const elements = [source, ...toValue(ignore)]
+    const elements = [target, ...toValue(ignore)]
 
     const shouldIgnore = elements.some((templateRef) => {
       const el = toValue(templateRef)
@@ -37,7 +26,7 @@ export function useClickOutside(source: TemplateRef, cb: Listener, options: Opti
     })
 
     if (!shouldIgnore) {
-      cb(e)
+      listener(e)
     }
   }
 
@@ -55,7 +44,7 @@ export function useClickOutside(source: TemplateRef, cb: Listener, options: Opti
   }
 
   onScopeDispose(unregister)
-  return unregister
+  return { stop: unregister }
 }
 
 // See: https://www.quirksmode.org/blog/archives/2014/02/mouse_event_bub.html
