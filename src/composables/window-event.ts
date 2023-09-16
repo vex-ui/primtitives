@@ -2,66 +2,79 @@ import type { Fn } from '@/types'
 import { isClient, noop, remove } from '@/utils'
 import { onScopeDispose } from 'vue'
 
-type WindowEvents = keyof WindowEventMap
-type Listener<T extends WindowEvents> = (event: WindowEventMap[T]) => void
-type SharedEventHandler<T extends WindowEvents> = {
-  listeners: Listener<T>[]
-  isAttached: boolean
-  remove: () => void
-}
-type HandlersMap = {
-  [K in WindowEvents]?: SharedEventHandler<K>
-}
-const handlersMap: HandlersMap = {}
-
 export function useWindowEvent<T extends WindowEvents>(eventType: T, listener: Listener<T>): Fn {
   if (!isClient) return noop
 
-  const handler = getHandler(eventType)
-  handler.listeners.push(listener)
-  attachHandler(handler, eventType)
-
-  const cleanup = () => {
-    remove(handler.listeners, listener)
-    if (!handler.listeners.length) {
-      handler.remove()
-    }
-  }
+  WindowEventsHandler.addListener(eventType, listener)
+  const cleanup = () => WindowEventsHandler.removeListener(eventType, listener)
 
   onScopeDispose(cleanup)
   return cleanup
 }
 
-function attachHandler<T extends WindowEvents>(handler: SharedEventHandler<T>, eventType: T): void {
-  if (!handler.isAttached) {
-    const listener: Listener<T> = (e) => handler.listeners.forEach((cb) => cb(e))
+//----------------------------------------------------------------------------------------------------
+// 📌 implementation
+//----------------------------------------------------------------------------------------------------
 
-    window.addEventListener(eventType, listener)
+type WindowEvents = keyof WindowEventMap
+type Listener<T extends WindowEvents> = (event: WindowEventMap[T]) => void
+type EventHandler<T extends WindowEvents> = {
+  listeners: Listener<T>[]
+  isAttached: boolean
+  detach: () => void
+}
+type HandlersMap = {
+  [K in WindowEvents]?: EventHandler<K>
+}
+
+//----------------------------------------------------------------------------------------------------
+
+export abstract class WindowEventsHandler {
+  static #map: HandlersMap = {}
+
+  private static getHandler<T extends WindowEvents>(event: T): EventHandler<T> {
+    return (this.#map[event] ??= {
+      listeners: [],
+      isAttached: false,
+      detach: noop,
+    })
+  }
+
+  private static attachHandler<T extends WindowEvents>(event: T, handler: EventHandler<T>): void {
+    const sharedListener: Listener<T> = (e) => handler.listeners.forEach((fn) => fn(e))
     handler.isAttached = true
+    window.addEventListener(event, sharedListener)
+    handler.detach = () => window.removeEventListener(event, sharedListener)
+  }
 
-    handler.remove = () => {
-      if (!handler.isAttached) return
-      window.removeEventListener(eventType, listener)
+  private static detachHandler<T extends WindowEvents>(event: T, handler: EventHandler<T>): void {
+    if (handler.isAttached) {
+      handler.detach()
       handler.isAttached = false
     }
   }
-}
 
-function getHandler<T extends WindowEvents>(eventType: T): SharedEventHandler<T> {
-  return (handlersMap[eventType] ??= {
-    listeners: [],
-    isAttached: false,
-    remove: noop,
-  })
-}
+  //  DO NOT USE in real code, this is just a test helper
+  private static clearMap(): void {
+    for (const [key, value] of Object.entries(this.#map)) {
+      value.detach()
+      delete this.#map[key as WindowEvents]
+    }
+  }
 
-/**
- * DO NOT USE.
- * this function is here only to support tests
- */
-export const clearMap = () => {
-  for (const [key, value] of Object.entries(handlersMap)) {
-    value.remove()
-    delete handlersMap[key as WindowEvents]
+  static addListener<T extends WindowEvents>(event: T, listener: Listener<T>): void {
+    const handler = this.getHandler(event)
+    handler.listeners.push(listener)
+    if (!handler.isAttached) {
+      this.attachHandler(event, handler)
+    }
+  }
+
+  static removeListener<T extends WindowEvents>(event: T, listener: Listener<T>): void {
+    const handler = this.getHandler(event)
+    remove(handler.listeners, listener)
+    if (!handler.listeners.length) {
+      this.detachHandler(event, handler)
+    }
   }
 }
