@@ -1,6 +1,6 @@
 import type { MaybeRefOrGetter, TemplateRef } from '@/types'
-import { isClient, isIOS, isWatchable, noop } from '@/utils'
-import { onScopeDispose, toValue, watch } from 'vue'
+import { isClient, isIOS, noop } from '@/utils'
+import { onScopeDispose, toValue } from 'vue'
 
 type Listener = (e: PointerEvent) => void
 
@@ -15,11 +15,14 @@ export function useClickOutside(target: TemplateRef, listener: Listener, options
 
   const { ignore = [], isActive = true } = options
 
-  const onClick: Listener = (e) => {
-    const path = e.composedPath()
-    const elements = [target, ...toValue(ignore)]
+  const onPointerDown: Listener = (e) => {
+    const _target = toValue(target)
+    if (!toValue(isActive) || !_target) return
 
-    const shouldIgnore = elements.some((templateRef) => {
+    const path = e.composedPath()
+    if (path.includes(_target)) return
+
+    const shouldIgnore = toValue(ignore).some((templateRef) => {
       const el = toValue(templateRef)
       return el && path.includes(el)
     })
@@ -29,18 +32,9 @@ export function useClickOutside(target: TemplateRef, listener: Listener, options
     }
   }
 
-  let unregister = noop
-  const watchSource = [target, isWatchable(isActive) ? isActive : () => isActive] as const
-
-  watch(watchSource, ([target, active]) => {
-    if (active && target) {
-      window.addEventListener('pointerdown', onClick, { capture: true })
-      unregister = () => window.removeEventListener('pointerdown', onClick, { capture: true })
-    } else {
-      unregister()
-      unregister = noop
-    }
-  })
+  window.addEventListener('pointerdown', onPointerDown, { capture: true })
+  const unregister = () =>
+    window.removeEventListener('pointerdown', onPointerDown, { capture: true })
 
   onScopeDispose(unregister)
   return unregister
