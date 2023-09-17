@@ -31,6 +31,12 @@ declare global {
 }
 
 Cypress.Commands.add('mount', mount)
+// Cypress.Commands.add('mount', (component: any, options: any = {}) => {
+//   //other mount stuff
 
+//   return mount(component, options).then(({ wrapper }) => {
+//     return cy.wrap(wrapper).as('wrapper')
+//   })
+// })
 // Example use:
 // cy.mount(MyComponent)
