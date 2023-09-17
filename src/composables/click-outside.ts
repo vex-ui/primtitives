@@ -16,8 +16,10 @@ export function useClickOutside(target: TemplateRef, listener: Listener, options
   const { ignore = [], isActive = true } = options
 
   const onPointerDown: Listener = (e) => {
+    if (!toValue(isActive)) return
+
     const _target = toValue(target)
-    if (!toValue(isActive) || !_target) return
+    if (!_target) return
 
     const path = e.composedPath()
     if (path.includes(_target)) return
