@@ -1,10 +1,5 @@
-import {
-  useContext,
-  useControllableState,
-  useID,
-  useSelectionGroup,
-  type SelectionGroup,
-} from '@/composables'
+import { useContext, useControllableState, useID, useSelectionGroup } from '@/composables'
+import type { SelectionGroup } from '@/composables/selection-group'
 import type { Getter } from '@/types'
 import { computedEager } from '@vueuse/core'
 import type { InjectionKey, PropType, Ref, SlotsType } from 'vue'
@@ -172,6 +167,7 @@ const AccordionContent = defineComponent({
 
 //----------------------------------------------------------------------------------------------------
 
+// TODO: should we export these?
 type Accordion = InstanceType<typeof Accordion>
 type AccordionItem = InstanceType<typeof AccordionItem>
 type AccordionTrigger = InstanceType<typeof AccordionTrigger>
