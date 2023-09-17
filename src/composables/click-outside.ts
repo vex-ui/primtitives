@@ -1,5 +1,5 @@
 import type { MaybeRefOrGetter, TemplateRef } from '@/types'
-import { isClient, isIOS, noop } from '@/utils'
+import { isClient, isIOS, noop, remove } from '@/utils'
 import { onScopeDispose, toValue } from 'vue'
 
 type Listener = (e: PointerEvent) => void
@@ -32,9 +32,7 @@ export function useClickOutside(target: TemplateRef, listener: Listener, options
     }
   }
 
-  window.addEventListener('pointerdown', onPointerDown, { capture: true })
-  const unregister = () =>
-    window.removeEventListener('pointerdown', onPointerDown, { capture: true })
+  const unregister = addWindowEventListener(onPointerDown)
 
   onScopeDispose(unregister)
   return unregister
@@ -46,5 +44,30 @@ function useIosWorkaround() {
   if (!isIOSWorkaroundActive && isIOS) {
     isIOSWorkaroundActive = true
     Array.from(document.body.children).forEach((el) => el.addEventListener('click', noop))
+  }
+}
+
+let isAttached = false
+const listeners: Listener[] = []
+const sharedListener = (e: PointerEvent) => {
+  listeners.forEach((cb) => cb(e))
+}
+
+function addWindowEventListener(listener: Listener) {
+  if (!listeners.includes(listener)) {
+    listeners.push(listener)
+  }
+
+  if (!isAttached) {
+    window.addEventListener('pointerdown', sharedListener, { capture: true })
+    isAttached = true
+  }
+
+  return () => {
+    remove(listeners, listener)
+    if (!listeners.length) {
+      window.removeEventListener('pointerdown', sharedListener, { capture: true })
+      isAttached = false
+    }
   }
 }
