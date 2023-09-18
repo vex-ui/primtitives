@@ -1,8 +1,23 @@
-module.exports = function (w) {
+export default () => {
   return {
-    files: ['src/**/*.ts'],
-
-    tests: ['src/**/*.test.{ts,tsx}'],
-    testFramework: 'vitest',
+    files: [
+      'src/**/*.ts',
+      'src/**/*.tsx',
+      'src/**/*.vue',
+      '!src/**/*.test.tsx',
+      '!src/**/*.cy.ts',
+      '!src/**/*.cy.tsx',
+      '!src/**/*.test.ts',
+      '!node_modules/**',
+    ],
+    tests: ['./src/**/*.test.ts', './src/**/*.test.tsx', '!node_modules/**'],
+    env: {
+      runner: 'node',
+      params: {
+        env: 'test=test',
+      },
+    },
+    runMode: 'onsave',
+    autoDetect: ['vitest'],
   }
 }

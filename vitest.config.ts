@@ -7,10 +7,10 @@ export default mergeConfig(
   viteConfig,
   defineConfig({
     test: {
-      globals: true,
+      // globals: true,
       environment: 'jsdom',
       root: fileURLToPath(new URL('./', import.meta.url)),
-      include: ['./src/**/*.test.ts', './src/**/*.test.tsx'],
+      include: ['./src/**/*.test.{ts,tsx}'],
       exclude: ['node_modules', 'dist', '.idea', '.git', '.cache', '/playwright'],
     },
   })
