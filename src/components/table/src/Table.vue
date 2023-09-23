@@ -1,11 +1,6 @@
 <script setup lang="ts">
-import { isString } from '@/composables/helpers'
-import {
-  TableNumericCell,
-  TableStatusCell,
-  TableTextCell,
-  TableDateCell,
-} from './TableBodyCell'
+import { isString } from '@vex-ui/composables/helpers'
+import { TableNumericCell, TableStatusCell, TableTextCell, TableDateCell } from './TableBodyCell'
 import { computed } from 'vue'
 
 // TODO: value does not need to be string

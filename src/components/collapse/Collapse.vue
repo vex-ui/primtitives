@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useControllableState } from '@/composables'
+import { useControllableState } from '@vex-ui/composables'
 import { TransitionExpand } from '@/transitions'
 import type { Orientation, TemplateRef } from '@/types'
 import { ref, toRef } from 'vue'

@@ -6,7 +6,7 @@ import {
   useRovingFocus,
   useSignal,
   isUsingKeyboard,
-} from '@/composables'
+} from '@vex-ui/composables'
 import { type Placement } from '@floating-ui/vue'
 import { provide } from 'vue'
 import { MENU_CONTENT_CTX, injectMenuContext } from './context'

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useListContext } from './context'
-import { useCollection, useID, useMemo, useTemplateRef } from '@/composables'
+import { useCollection, useID, useMemo, useTemplateRef } from '@vex-ui/composables'
 
 //----------------------------------------------------------------------------------------------------
 // 📌 component meta

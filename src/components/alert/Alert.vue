@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { IconDangerSign, IconWarn, IconCheckCircle, IconBell, IconXMark } from '@/icons'
-import { useID } from '@/composables'
+import { useID } from '@vex-ui/composables'
 
 //----------------------------------------------------------------------------------------------------
 // 📌 component meta

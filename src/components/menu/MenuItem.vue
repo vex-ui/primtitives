@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useCollection, useMemo, useID, useTemplateRef } from '@/composables'
+import { useCollection, useMemo, useID, useTemplateRef } from '@vex-ui/composables'
 import { injectGroupContext, injectContentContext, injectTriggerContext } from './context'
 import { CheckIcon, ChevronRightIcon } from '@heroicons/vue/20/solid'
 

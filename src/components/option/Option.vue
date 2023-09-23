@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useCollection, useID, useSelectScope } from '@/composables'
+import { useCollection, useID, useSelectScope } from '@vex-ui/composables'
 import { CheckIcon } from '@heroicons/vue/20/solid'
 import { ref } from 'vue'
 

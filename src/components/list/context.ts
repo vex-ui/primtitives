@@ -1,6 +1,6 @@
 import type { InjectionKey, Ref } from 'vue'
 import type { ComputableGetter, Setter } from '@/types'
-import { useContext } from '@/composables'
+import { useContext } from '@vex-ui/composables'
 
 type Value = string
 

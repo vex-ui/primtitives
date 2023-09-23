@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { useDelayedOpen, useFloating, useID, useInjectRef } from '@/composables'
+import { useDelayedOpen, useFloating, useID, useInjectRef } from '@vex-ui/composables'
 import { EXPOSED_EL } from '@/config'
 import type { Placement, Strategy } from '@floating-ui/vue'
 import { onClickOutside, useEventListener } from '@vueuse/core'

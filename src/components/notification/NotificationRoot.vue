@@ -3,7 +3,7 @@ import type { NotificationItem } from '.'
 import Notification from './Notification.vue'
 import { animate, timeline } from 'motion'
 import { useEventListener } from '@vueuse/core'
-import { isString } from '@/composables/helpers'
+import { isString } from '@vex-ui/composables/helpers'
 import { ref } from 'vue'
 
 //----------------------------------------------------------------------------------------------------

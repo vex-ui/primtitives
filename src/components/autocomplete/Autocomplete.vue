@@ -75,9 +75,9 @@ import {
   useID,
   useRovingFocus,
   useVModel,
-} from '@/composables'
-import { isArray } from '@/composables/helpers'
-import { useInputSearch } from '@/composables/input-search'
+} from '@vex-ui/composables'
+import { isArray } from '@vex-ui/composables/helpers'
+import { useInputSearch } from '@vex-ui/composables/input-search'
 import { IconChevronUpDown } from '@/icons'
 import type { TemplateRef } from '@/types'
 import { controlledRef, onClickOutside, useEventListener } from '@vueuse/core'

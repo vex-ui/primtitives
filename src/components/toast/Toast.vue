@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { IconDangerSign, IconBell, IconCheckCircle, IconWarn } from '@/icons'
-import { isString } from '@/composables/helpers'
-import { useTimer } from '@/composables/timer'
+import { isString } from '@vex-ui/composables/helpers'
+import { useTimer } from '@vex-ui/composables/timer'
 import { onMounted, computed } from 'vue'
 import type { Component } from 'vue'
 

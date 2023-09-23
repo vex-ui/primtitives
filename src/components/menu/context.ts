@@ -1,5 +1,5 @@
-import { useContext } from '@/composables'
-import type { TemplateRef } from '@/composables/template-ref'
+import { useContext } from '@vex-ui/composables'
+import type { TemplateRef } from '@vex-ui/composables/template-ref'
 import type { Signal, ComputableGetter, Setter, Fn, Getter } from '@/types'
 import { inject, type InjectionKey } from 'vue'
 
