@@ -20,6 +20,9 @@ dependencies:
   '@tanstack/vue-table':
     specifier: ^8.9.7
     version: 8.9.7(vue@3.3.4)
+  '@vex-ui/composables':
+    specifier: ^0.1.1
+    version: 0.1.1
   '@vueuse/core':
     specifier: ^10.4.1
     version: 10.4.1(vue@3.3.4)
@@ -1144,6 +1147,15 @@ packages:
       '@types/node': 18.17.17
     dev: true
     optional: true
+
+  /@vex-ui/composables@0.1.1:
+    resolution: {integrity: sha512-nU+62Vg6bu3N3nwR+xNvdnd5FfDw1+puk0X5Md+G0UQfRrBJ4ZySNl+7B0eHSwRSHTnOa+nZdRD5UFV65UAAVQ==}
+    dependencies:
+      '@floating-ui/dom': 1.5.1
+      focus-trap: 7.5.2
+      playwright: 1.38.1
+      vue: 3.3.4
+    dev: false
 
   /@vite-plugin-vue-devtools/core@1.0.0-rc.4(vite@4.4.9):
     resolution: {integrity: sha512-UE1+SGkSSI5SL7wujLNKXPw1f2xLhmXUvwfsaKUaQDulafHbD+/1Xs/gsVGGzrJiwE3e2TU+BU1HiPFCXHhTiA==}
@@ -2842,6 +2854,14 @@ packages:
     resolution: {integrity: sha512-OO0pH2lK6a0hZnAdau5ItzHPI6pUlvI7jMVnxUQRtw4owF2wk8lOSabtGDCTP4Ggrg2MbGnWO9X8K1t4+fGMDw==}
     dev: true
 
+  /fsevents@2.3.2:
+    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
+    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
+    os: [darwin]
+    requiresBuild: true
+    dev: false
+    optional: true
+
   /fsevents@2.3.3:
     resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
@@ -4305,6 +4325,22 @@ packages:
       mlly: 1.4.2
       pathe: 1.1.1
     dev: true
+
+  /playwright-core@1.38.1:
+    resolution: {integrity: sha512-tQqNFUKa3OfMf4b2jQ7aGLB8o9bS3bOY0yMEtldtC2+spf8QXG9zvXLTXUeRsoNuxEYMgLYR+NXfAa1rjKRcrg==}
+    engines: {node: '>=16'}
+    hasBin: true
+    dev: false
+
+  /playwright@1.38.1:
+    resolution: {integrity: sha512-oRMSJmZrOu1FP5iu3UrCx8JEFRIMxLDM0c/3o4bpzU5Tz97BypefWf7TuTNPWeCe279TPal5RtPPZ+9lW/Qkow==}
+    engines: {node: '>=16'}
+    hasBin: true
+    dependencies:
+      playwright-core: 1.38.1
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: false
 
   /postcss@8.4.29:
     resolution: {integrity: sha512-cbI+jaqIeu/VGqXEarWkRCCffhjgXc0qjBtXpqJhTBohMUjUQnbBr0xqX3vEKudc4iviTewcJo5ajcec5+wdJw==}

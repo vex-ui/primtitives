@@ -34,6 +34,7 @@
     "@heroicons/vue": "^2.0.18",
     "@tanstack/table-core": "^8.9.7",
     "@tanstack/vue-table": "^8.9.7",
+    "@vex-ui/composables": "^0.1.1",
     "@vueuse/core": "^10.4.1",
     "chartist": "^1.3.0",
     "focus-trap": "^7.5.2",
