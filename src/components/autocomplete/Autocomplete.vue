@@ -68,16 +68,16 @@ export interface AutocompleteProps {
 <script setup lang="ts">
 import { Input } from '@/components'
 import {
-  createCollection,
-  createSelectScope,
+  useCollection,
+  useSelectionGroup,
   useEscapeKey,
   useFloating,
   useID,
   useRovingFocus,
   useVModel,
 } from '@vex-ui/composables'
-import { isArray } from '@vex-ui/composables/helpers'
-import { useInputSearch } from '@vex-ui/composables/input-search'
+import { isArray } from '@vex-ui/composables'
+import { useInputSearch } from '@vex-ui/composables'
 import { IconChevronUpDown } from '@/icons'
 import type { TemplateRef } from '@/types'
 import { controlledRef, onClickOutside, useEventListener } from '@vueuse/core'
@@ -112,12 +112,12 @@ const modelValue = useVModel(() => p.modelValue?.value, {
   setter: (newValue) => (newValue ? { label: getLabel(newValue)!, value: newValue } : undefined),
 })
 
-const { selected, resetSelected } = createSelectScope(modelValue, {
+const { selected, clearSelected } = useSelectionGroup(modelValue, {
   deselection: () => true,
   multiselect: () => p.multiselect,
 })
 
-const { elements: OptionsElements } = createCollection(ContentEl)
+const { elements: OptionsElements } = useCollection(triggerID)
 
 //----------------------------------------------------------------------------------------------------
 // 📌 keyboard interactions & visibility
@@ -187,7 +187,7 @@ watch(selected, (selected) => {
 
 //----------------------------------------------------------------------------------------------------
 
-useEventListener(getFormEl, 'reset', () => resetSelected())
+useEventListener(getFormEl, 'reset', () => clearSelected())
 
 function getLabel(value?: string): string | undefined {
   if (value === undefined) return undefined
