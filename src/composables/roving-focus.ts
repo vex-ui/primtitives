@@ -1,6 +1,6 @@
-import type { Getter, Orientation } from '@/types'
+import type { Getter, MaybeRefOrGetter, Orientation } from '@/types'
 import { wrapArray } from '@/utils'
-import type { Ref } from 'vue'
+import { toValue, type Ref, toRef } from 'vue'
 import { useEventListener } from '.'
 import { useKeyIntent } from './key-intent'
 
@@ -10,24 +10,24 @@ interface RovingFocusOptions {
 }
 
 export function useRovingFocus(
-  parent: Ref<HTMLElement | null>,
-  children: Ref<HTMLElement[]>,
+  parent: MaybeRefOrGetter<HTMLElement | null>,
+  children: MaybeRefOrGetter<HTMLElement[]>,
   options: RovingFocusOptions = {}
 ) {
   const { orientation, onEntryFocus } = options
 
   useEventListener(parent, 'focus', (e: FocusEvent) => {
-    onEntryFocus ? onEntryFocus(e, focusFirst) : focusFirst(children.value)
+    onEntryFocus ? onEntryFocus(e, focusFirst) : focusFirst(toValue(children))
   })
 
   useKeyIntent(
-    parent,
+    toRef(parent),
     (e, intent) => {
       e.preventDefault()
       e.stopPropagation()
 
       // TODO: fastest way to shallow clone an array?
-      let elements = [...children.value]
+      let elements = [...toValue(children)]
 
       switch (intent) {
         case 'next': {
