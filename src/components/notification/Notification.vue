@@ -2,7 +2,7 @@
 import { computed, onMounted, ref } from 'vue'
 import { useEventListener, useMouseInElement } from '@vueuse/core'
 import { IconDangerSign, IconBell, IconXMark, IconCheckCircle, IconWarn } from '@/icons'
-import { useTimer } from '@vex-ui/composables'
+import { useTimer } from '@/composables'
 import { Progress } from '@/components/progress'
 import { animate } from 'motion'
 

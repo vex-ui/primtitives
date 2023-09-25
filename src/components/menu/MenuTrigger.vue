@@ -2,8 +2,8 @@
 import { provide, type VNode, h, nextTick } from 'vue'
 import { MENU_TRIGGER_CTX, injectMenuContext } from './context'
 import { useEventListener } from '@vueuse/core'
-import { useKeydownIntent } from '@vex-ui/composables/keydown'
-import { useClickOutside, useHoverOpen, useMemo } from '@vex-ui/composables'
+import { useKeydownIntent } from '@/composables/keydown'
+import { useClickOutside, useHoverOpen, useMemo } from '@/composables'
 
 //----------------------------------------------------------------------------------------------------
 // 📌 component meta

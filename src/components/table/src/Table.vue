@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { isString } from '@vex-ui/composables/helpers'
+import { isString } from '@/composables/helpers'
 import { TableNumericCell, TableStatusCell, TableTextCell, TableDateCell } from './TableBodyCell'
 import { computed } from 'vue'
 

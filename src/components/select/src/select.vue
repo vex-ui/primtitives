@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Input, Tag } from '@/components'
-import { useFloating, useID, useListSelection } from '@vex-ui/composables'
+import { useFloating, useID, useListSelection } from '@/composables'
 import { useElementSize, useEventListener } from '@vueuse/core'
 import { nextTick, reactive, ref, computed, toRef, provide } from 'vue'
 import { IconArrowDown } from '@/icons'

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useCollection, useSelectScope, useID } from '@vex-ui/composables'
+import { useCollection, useSelectScope, useID } from '@/composables'
 import { IconCheck } from '@/icons'
 import { TransitionExpand } from '@/transitions'
 import { ref } from 'vue'

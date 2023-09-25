@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useTemplateRef } from '@vex-ui/composables'
+import { useTemplateRef } from '@/composables'
 import { onBeforeUpdate, onMounted, onUpdated } from 'vue'
 
 //----------------------------------------------------------------------------------------------------

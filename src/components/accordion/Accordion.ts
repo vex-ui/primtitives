@@ -4,7 +4,7 @@ import {
   useID,
   useSelectionGroup,
   type SelectionGroup,
-} from '@vex-ui/composables'
+} from '@/composables'
 import type { Getter } from '@/types'
 import { computedEager } from '@vueuse/core'
 import type { InjectionKey, PropType, Ref, SlotsType } from 'vue'

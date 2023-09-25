@@ -5,7 +5,7 @@ import {
   createSelectScope,
   useTemplateRef,
   useVModel,
-} from '@vex-ui/composables'
+} from '@/composables'
 import { provide } from 'vue'
 import { LIST_CTX } from './context'
 import type { Orientation } from '@/types'

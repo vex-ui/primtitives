@@ -1,7 +1,7 @@
 import { render, h, markRaw } from 'vue'
 import type { VNode, Component } from 'vue'
 import ToastRoot from './ToastRoot.vue'
-import { useID } from '@vex-ui/composables'
+import { useID } from '@/composables'
 
 export interface ToastifyProps {
   content: string | Component

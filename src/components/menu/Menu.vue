@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useControllableState, useID, useTemplateRef } from '@vex-ui/composables'
+import { useControllableState, useID, useTemplateRef } from '@/composables'
 import { inject, onUnmounted, provide, shallowReactive, toRef } from 'vue'
 import { MENU_CTX, type MenuContext } from './context'
 import type { Getter } from '@/types'

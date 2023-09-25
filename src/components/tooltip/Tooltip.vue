@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { arrowMiddleware, useArrow, useFloating, useID } from '@vex-ui/composables'
+import { arrowMiddleware, useArrow, useFloating, useID } from '@/composables'
 import { EXPOSED_EL } from '@/config'
 import type { Placement, Strategy } from '@floating-ui/vue'
 import { useEventListener } from '@vueuse/core'

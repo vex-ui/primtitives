@@ -66,7 +66,6 @@ export interface AutocompleteProps {
 </script>
 
 <script setup lang="ts">
-import { Input } from '@/components'
 import {
   useCollection,
   useSelectionGroup,
@@ -75,9 +74,8 @@ import {
   useID,
   useRovingFocus,
   useVModel,
-} from '@vex-ui/composables'
-import { isArray } from '@vex-ui/composables'
-import { useInputSearch } from '@vex-ui/composables'
+} from '@/composables'
+import { isArray } from '@/composables'
 import { IconChevronUpDown } from '@/icons'
 import type { TemplateRef } from '@/types'
 import { controlledRef, onClickOutside, useEventListener } from '@vueuse/core'
@@ -108,9 +106,7 @@ const contentID = useID()
 
 const isContentOpen = ref(false)
 
-const modelValue = useVModel(() => p.modelValue?.value, {
-  setter: (newValue) => (newValue ? { label: getLabel(newValue)!, value: newValue } : undefined),
-})
+const modelValue = useVModel<Option>(() => p.modelValue)
 
 const { selected, clearSelected } = useSelectionGroup(modelValue, {
   deselection: () => true,
@@ -202,7 +198,7 @@ const { floatingStyles } = useFloating(TriggerEl, ContentEl, isContentOpen, {
 </script>
 
 <template>
-  <Input
+  <input
     v-model="inputValue"
     v-bind="$attrs"
     @blur="onTriggerBlur(selected)"
@@ -212,18 +208,9 @@ const { floatingStyles } = useFloating(TriggerEl, ContentEl, isContentOpen, {
     :aria-expanded="isContentOpen"
     :aria-controls="contentID"
     :id="triggerID"
-    :compact="p.compact"
     aria-haspopup="listbox"
     aria-autocomplete="list"
-  >
-    <template v-if="$slots.icon" #icon>
-      <slot name="icon" />
-    </template>
-
-    <template #suffix>
-      <IconChevronUpDown class="vex-autocomplete-chevron" />
-    </template>
-  </Input>
+  />
 
   <!-- listbox -->
 

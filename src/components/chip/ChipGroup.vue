@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { useRovingFocus, createSelectScope, useVModel, createCollection } from '@vex-ui/composables'
+import { useRovingFocus, createSelectScope, useVModel, createCollection } from '@/composables'
 import type { Orientation } from '@/types'
 
 //----------------------------------------------------------------------------------------------------
