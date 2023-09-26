@@ -8,31 +8,34 @@ import { useComboboxContext } from './ComboboxContext'
 // 📌 ComboboxTrigger
 //----------------------------------------------------------------------------------------------------
 
-export const ComboboxTrigger = defineComponent((p) => {
-  const { listboxID, listboxEl, isDropdownVisible, triggerID, triggerEl, showDropdown } =
-    useComboboxContext('ComboboxTrigger')
+export const ComboboxTrigger = defineComponent(
+  (p) => {
+    const { listboxID, listboxEl, isDropdownVisible, triggerID, triggerEl, showDropdown } =
+      useComboboxContext('ComboboxTrigger')
 
-  return () =>
-    h('input', {
-      type: 'text',
-      ref: triggerEl,
-      autocomplete: 'off',
-      id: triggerID,
-      role: 'combobox',
-      'aria-controls': listboxID,
-      'aria-expanded': isDropdownVisible.value,
-      'aria-autocomplete': p.ariaAutocomplete,
-      onFocus: (e: FocusEvent) => {
-        showDropdown(isUsingKeyboard.value ? 'keyboard' : 'mouse')
-      },
-      onKeydown: (e: KeyboardEvent) => {
-        if (e.key === 'ArrowDown' && isDropdownVisible.value) {
-          e.preventDefault()
-          nextTick(() => listboxEl.value?.focus())
-        }
-      },
-    })
-})
+    return () =>
+      h('input', {
+        type: 'text',
+        ref: triggerEl,
+        autocomplete: 'off',
+        id: triggerID,
+        role: 'combobox',
+        'aria-controls': listboxID,
+        'aria-expanded': isDropdownVisible.value,
+        'aria-autocomplete': p.ariaAutocomplete,
+        onFocus: (e: FocusEvent) => {
+          showDropdown(isUsingKeyboard.value ? 'keyboard' : 'mouse')
+        },
+        onKeydown: (e: KeyboardEvent) => {
+          if (e.key === 'ArrowDown' && isDropdownVisible.value) {
+            e.preventDefault()
+            nextTick(() => listboxEl.value?.focus())
+          }
+        },
+      })
+  },
+  { name: 'ComboboxTrigger' }
+)
 
 //----------------------------------------------------------------------------------------------------
 // 📌 ComboboxDropdown
@@ -94,7 +97,7 @@ export const ComboboxDropdown = defineComponent<ComboboxDropdownProps>(
       strategy: () => p.strategy,
       placement: () => p.placement,
       middleware: p.middleware,
-      autoMinWidth: () => p.autoMinWidth,
+      autoMinWidth: () => p.autoMinWidth ?? true,
     })
 
     return () =>
@@ -107,7 +110,10 @@ export const ComboboxDropdown = defineComponent<ComboboxDropdownProps>(
         slots.default?.()
       )
   },
-  { props: ['placement', 'autoMinWidth', 'middleware', 'offset', 'padding', 'strategy', 'offset'] }
+  {
+    name: 'ComboboxDropdown',
+    props: ['placement', 'autoMinWidth', 'middleware', 'offset', 'padding', 'strategy', 'offset'],
+  }
 )
 
 //----------------------------------------------------------------------------------------------------
@@ -133,7 +139,7 @@ export const ComboboxListbox = defineComponent<ComboboxListboxProps>(
           role: 'listbox',
           ref: listboxEl,
           tabindex: '-1',
-          'aria-describedby': triggerID,
+          'aria-labelledby': triggerID,
           'aria-autocomplete': p.ariaAutocomplete,
           onClick: (e: MouseEvent) => {
             const option = (e.target as HTMLElement).closest<HTMLElement>('[role=option]') ?? null
@@ -147,7 +153,7 @@ export const ComboboxListbox = defineComponent<ComboboxListboxProps>(
         slots.default?.()
       )
   },
-  { props: ['ariaAutocomplete'] }
+  { name: 'ComboboxListbox', props: ['ariaAutocomplete'] }
 )
 
 //----------------------------------------------------------------------------------------------------
@@ -174,5 +180,5 @@ export const ComboboxOption = defineComponent<ComboboxOptionProps>(
         slots.default?.()
       )
   },
-  { props: ['value'] }
+  { name: 'ComboboxOption', props: ['value'] }
 )
