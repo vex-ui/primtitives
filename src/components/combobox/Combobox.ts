@@ -1,4 +1,10 @@
-import { isUsingKeyboard, useClickOutside, useFloating, useRovingFocus } from '@/composables'
+import {
+  isUsingKeyboard,
+  useClickOutside,
+  useEscapeKey,
+  useFloating,
+  useRovingFocus,
+} from '@/composables'
 import type { TemplateRef } from '@/types'
 import type { Middleware, Padding, Placement, Strategy } from '@floating-ui/dom'
 import { defineComponent, h, nextTick, ref } from 'vue'
@@ -23,12 +29,10 @@ export const ComboboxTrigger = defineComponent(
         'aria-controls': listboxID,
         'aria-expanded': isDropdownVisible.value,
         'aria-autocomplete': p.ariaAutocomplete,
-        onFocus: (e: FocusEvent) => {
-          showDropdown(isUsingKeyboard.value ? 'keyboard' : 'mouse')
-        },
         onKeydown: (e: KeyboardEvent) => {
-          if (e.key === 'ArrowDown' && isDropdownVisible.value) {
+          if (e.key === 'ArrowDown') {
             e.preventDefault()
+            showDropdown()
             nextTick(() => listboxEl.value?.focus())
           }
         },
@@ -91,6 +95,11 @@ export const ComboboxDropdown = defineComponent<ComboboxDropdownProps>(
       { ignore: [triggerEl] }
     )
 
+    useEscapeKey(() => {
+      hideDropdown('keyboard')
+      triggerEl.value?.focus({ preventScroll: true })
+    })
+
     const { floatingStyles } = useFloating(triggerEl, dropdownEl, isDropdownVisible, {
       offset: p.offset,
       padding: p.padding,
@@ -142,7 +151,7 @@ export const ComboboxListbox = defineComponent<ComboboxListboxProps>(
           'aria-labelledby': triggerID,
           'aria-autocomplete': p.ariaAutocomplete,
           onClick: (e: MouseEvent) => {
-            const option = (e.target as HTMLElement).closest<HTMLElement>('[role=option]') ?? null
+            const option = (e.target as HTMLElement).closest<HTMLElement>('[role=option]')
             const isSelected = option?.getAttribute('aria-selected') === 'true'
             const value = option?.dataset.vexValue
             if (!isSelected && value) {
@@ -166,8 +175,6 @@ export interface ComboboxOptionProps {
 
 export const ComboboxOption = defineComponent<ComboboxOptionProps>(
   (p, { slots }) => {
-    // const { select } = useComboboxContext('ComboboxOption')
-
     return () =>
       h(
         'div',
