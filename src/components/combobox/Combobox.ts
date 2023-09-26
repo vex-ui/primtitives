@@ -106,7 +106,7 @@ export const ComboboxDropdown = defineComponent<ComboboxDropdownProps>(
       strategy: () => p.strategy,
       placement: () => p.placement,
       middleware: p.middleware,
-      autoMinWidth: () => p.autoMinWidth ?? true,
+      autoMinWidth: () => p.autoMinWidth,
     })
 
     return () =>
