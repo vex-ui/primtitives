@@ -1,6 +1,7 @@
-import { isUsingKeyboard, useClickOutside, useContext, useID } from '@/composables'
-import { defineComponent, h, ref, provide } from 'vue'
-import type { SlotsType, InjectionKey, Ref } from 'vue'
+import { isUsingKeyboard, useClickOutside, useFloating, useRovingFocus } from '@/composables'
+import type { TemplateRef } from '@/types'
+import type { Middleware, Padding, Placement, Strategy } from '@floating-ui/dom'
+import { defineComponent, h, nextTick, ref } from 'vue'
 import { useComboboxContext } from './ComboboxContext'
 
 //----------------------------------------------------------------------------------------------------
@@ -8,24 +9,28 @@ import { useComboboxContext } from './ComboboxContext'
 //----------------------------------------------------------------------------------------------------
 
 export const ComboboxTrigger = defineComponent((p) => {
-  const { listboxID, isDropdownVisible, triggerID, triggerEl, showDropdown, hideDropdown } =
+  const { listboxID, listboxEl, isDropdownVisible, triggerID, triggerEl, showDropdown } =
     useComboboxContext('ComboboxTrigger')
-
-  const onFocus = (e: FocusEvent) => {
-    showDropdown(isUsingKeyboard.value ? 'keyboard' : 'mouse')
-  }
 
   return () =>
     h('input', {
       type: 'text',
-      role: 'combobox',
       ref: triggerEl,
       autocomplete: 'off',
       id: triggerID,
+      role: 'combobox',
       'aria-controls': listboxID,
       'aria-expanded': isDropdownVisible.value,
       'aria-autocomplete': p.ariaAutocomplete,
-      onFocus,
+      onFocus: (e: FocusEvent) => {
+        showDropdown(isUsingKeyboard.value ? 'keyboard' : 'mouse')
+      },
+      onKeydown: (e: KeyboardEvent) => {
+        if (e.key === 'ArrowDown' && isDropdownVisible.value) {
+          e.preventDefault()
+          nextTick(() => listboxEl.value?.focus())
+        }
+      },
     })
 })
 
@@ -34,13 +39,46 @@ export const ComboboxTrigger = defineComponent((p) => {
 //----------------------------------------------------------------------------------------------------
 
 export interface ComboboxDropdownProps {
-  ariaAutocomplete?: 'none' | 'inline' | 'list' | 'both'
+  /**
+   * Where to place the floating element relative to its reference element.
+   * @default 'bottom-start'
+   */
+  placement?: Placement
+
+  /**
+   * The type of CSS positioning to use.
+   * @default 'absolute'
+   */
+  strategy?: Strategy
+
+  /**
+   * These are plain objects that modify the positioning coordinates in some fashion, or provide useful data for the consumer to use.
+   *  DO NOT USE SIZE MIDDLEWARE HERE*, use the autoMinWidth option.
+   */
+  middleware?: Middleware[]
+
+  /**
+   * Whether to auto set the floatingEl min-width to the width of the referenceEl
+   */
+  autoMinWidth?: boolean
+
+  /**
+   * The distance between the referenceEl and the floatingEl
+   */
+  offset?: number
+
+  /**
+   * The distance between the viewport and the floatingEl
+   */
+  padding?: Padding
 }
 
 export const ComboboxDropdown = defineComponent<ComboboxDropdownProps>(
   (p, { slots }) => {
-    const { listboxID, triggerID, listboxEl, triggerEl, hideDropdown, select } =
+    const { listboxEl, triggerEl, hideDropdown, isDropdownVisible } =
       useComboboxContext('ComboboxDropdown')
+
+    const dropdownEl: TemplateRef = ref(null)
 
     useClickOutside(
       listboxEl,
@@ -50,14 +88,42 @@ export const ComboboxDropdown = defineComponent<ComboboxDropdownProps>(
       { ignore: [triggerEl] }
     )
 
-    const onClick = (e: MouseEvent) => {
-      const option = (e.target as HTMLElement).closest<HTMLElement>('[role=option]') ?? null
-      const isSelected = option?.getAttribute('aria-selected') === 'true'
-      const value = option?.dataset.vexValue
-      if (isSelected || !value) return
+    const { floatingStyles } = useFloating(triggerEl, dropdownEl, isDropdownVisible, {
+      offset: p.offset,
+      padding: p.padding,
+      strategy: () => p.strategy,
+      placement: () => p.placement,
+      middleware: p.middleware,
+      autoMinWidth: () => p.autoMinWidth,
+    })
 
-      select(value)
-    }
+    return () =>
+      h(
+        'div',
+        {
+          ref: dropdownEl,
+          style: { ...floatingStyles.value, 'min-width': 'var(--vex-auto-min-width)' },
+        },
+        slots.default?.()
+      )
+  },
+  { props: ['placement', 'autoMinWidth', 'middleware', 'offset', 'padding', 'strategy', 'offset'] }
+)
+
+//----------------------------------------------------------------------------------------------------
+// 📌 ComboboxListbox
+//----------------------------------------------------------------------------------------------------
+
+export interface ComboboxListboxProps {
+  ariaAutocomplete?: 'none' | 'inline' | 'list' | 'both'
+}
+
+export const ComboboxListbox = defineComponent<ComboboxListboxProps>(
+  (p, { slots }) => {
+    const { listboxID, triggerID, listboxEl, select, getOptions } =
+      useComboboxContext('ComboboxListbox')
+
+    useRovingFocus(listboxEl, getOptions)
 
     return () =>
       h(
@@ -66,9 +132,17 @@ export const ComboboxDropdown = defineComponent<ComboboxDropdownProps>(
           id: listboxID,
           role: 'listbox',
           ref: listboxEl,
+          tabindex: '-1',
           'aria-describedby': triggerID,
           'aria-autocomplete': p.ariaAutocomplete,
-          onClick,
+          onClick: (e: MouseEvent) => {
+            const option = (e.target as HTMLElement).closest<HTMLElement>('[role=option]') ?? null
+            const isSelected = option?.getAttribute('aria-selected') === 'true'
+            const value = option?.dataset.vexValue
+            if (!isSelected && value) {
+              select(value)
+            }
+          },
         },
         slots.default?.()
       )
@@ -86,7 +160,7 @@ export interface ComboboxOptionProps {
 
 export const ComboboxOption = defineComponent<ComboboxOptionProps>(
   (p, { slots }) => {
-    const { select } = useComboboxContext('ComboboxOption')
+    // const { select } = useComboboxContext('ComboboxOption')
 
     return () =>
       h(
@@ -95,6 +169,7 @@ export const ComboboxOption = defineComponent<ComboboxOptionProps>(
           role: 'option',
           'aria-selected': false,
           'data-vex-value': p.value,
+          tabindex: '-1',
         },
         slots.default?.()
       )
