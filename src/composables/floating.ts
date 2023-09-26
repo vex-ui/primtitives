@@ -36,7 +36,7 @@ export interface UseFloatingOptions {
   placement?: MaybeRefOrGetter<Placement | undefined>
 
   /**
-   * The type of CSS position property to use.
+   * The type of CSS positioning to use.
    * @default 'absolute'
    */
   strategy?: MaybeRefOrGetter<Strategy | undefined>
