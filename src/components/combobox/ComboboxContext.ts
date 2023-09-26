@@ -15,13 +15,14 @@ export interface ComboboxContext {
   isDropdownVisible: Readonly<Ref<boolean>>
 
   select: (value: string) => void
+  getOptions: () => HTMLElement[]
   showDropdown: (source: ChangeEventSource) => void
   hideDropdown: (source: ChangeEventSource) => void
 }
 
 export interface UseComboboxOptions {
-  onDropdownShow?: (source: ChangeEventSource) => void
-  onDropdownHide?: (source: ChangeEventSource) => void
+  onShowDropdown?: (source: ChangeEventSource) => void
+  onHideDropdown?: (source: ChangeEventSource) => void
 
   loop?: MaybeRefOrGetter<boolean>
   scrollBehavior?: MaybeRefOrGetter<ScrollBehavior>
@@ -32,7 +33,7 @@ export interface UseComboboxOptions {
 const COMBOBOX_INJECTION_KEY = Symbol() as InjectionKey<ComboboxContext>
 
 export function useCombobox(options: UseComboboxOptions = {}) {
-  const { onDropdownHide, onDropdownShow, scrollBehavior = 'auto', loop = true } = options
+  const { onHideDropdown, onShowDropdown, scrollBehavior = 'auto', loop = true } = options
 
   const listboxID = useID()
   const triggerID = useID()
@@ -42,20 +43,20 @@ export function useCombobox(options: UseComboboxOptions = {}) {
   const isDropdownVisible = ref(false)
   const selected = ref<string | undefined>()
 
-  const showDropdown = (source: ChangeEventSource) => {
+  const showDropdown = (source: ChangeEventSource): void => {
     if (isDropdownVisible.value) return
     isDropdownVisible.value = true
-    onDropdownShow?.(source)
+    onShowDropdown?.(source)
   }
 
-  const hideDropdown = (source: ChangeEventSource) => {
+  const hideDropdown = (source: ChangeEventSource): void => {
     if (!isDropdownVisible.value) return
     isDropdownVisible.value = false
-    onDropdownHide?.(source)
+    onHideDropdown?.(source)
   }
 
-  const select = (value: string) => {
-    const option = getOptions(listboxEl).find((item) => item.dataset.vexValue === value)
+  const select = (value: string): void => {
+    const option = getOptions().find((item) => item.dataset.vexValue === value)
     if (option) {
       clearSelected()
       option.setAttribute('aria-selected', 'true')
@@ -63,7 +64,7 @@ export function useCombobox(options: UseComboboxOptions = {}) {
     }
   }
 
-  const clearSelected = () => {
+  const clearSelected = (): void => {
     const items = listboxEl.value?.querySelectorAll<HTMLElement>(
       '[role=option][aria-selected=true]'
     )
@@ -73,6 +74,10 @@ export function useCombobox(options: UseComboboxOptions = {}) {
     })
 
     selected.value = undefined
+  }
+
+  const getOptions = (): HTMLElement[] => {
+    return Array.from(listboxEl.value?.querySelectorAll<HTMLElement>('[role=option]') ?? [])
   }
 
   provide(COMBOBOX_INJECTION_KEY, {
@@ -86,6 +91,7 @@ export function useCombobox(options: UseComboboxOptions = {}) {
     isDropdownVisible: readonly(isDropdownVisible),
 
     select,
+    getOptions,
     showDropdown,
     hideDropdown,
   })
@@ -98,15 +104,6 @@ export function useCombobox(options: UseComboboxOptions = {}) {
   }
 }
 
-// TODO: fix the any return type on @/composables then remove this annotation
-export function useComboboxContext(component: string): ComboboxContext {
+export function useComboboxContext(component: string) {
   return useContext(COMBOBOX_INJECTION_KEY, 'Combobox', component)
-}
-
-//----------------------------------------------------------------------------------------------------
-// 📌 utils
-//----------------------------------------------------------------------------------------------------
-
-function getOptions(list: TemplateRef): HTMLElement[] {
-  return Array.from(list.value?.querySelectorAll<HTMLElement>('[role=option]') ?? [])
 }
