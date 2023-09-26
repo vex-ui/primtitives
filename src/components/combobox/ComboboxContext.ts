@@ -16,8 +16,8 @@ export interface ComboboxContext {
 
   select: (value: string) => void
   getOptions: () => HTMLElement[]
-  showDropdown: (source: ChangeEventSource) => void
-  hideDropdown: (source: ChangeEventSource) => void
+  showDropdown: (source?: ChangeEventSource) => void
+  hideDropdown: (source?: ChangeEventSource) => void
 }
 
 export interface UseComboboxOptions {
@@ -43,13 +43,13 @@ export function useCombobox(options: UseComboboxOptions = {}) {
   const isDropdownVisible = ref(false)
   const selected = ref<string | undefined>()
 
-  const showDropdown = (source: ChangeEventSource): void => {
+  const showDropdown = (source: ChangeEventSource = 'unknown'): void => {
     if (isDropdownVisible.value) return
     isDropdownVisible.value = true
     onShowDropdown?.(source)
   }
 
-  const hideDropdown = (source: ChangeEventSource): void => {
+  const hideDropdown = (source: ChangeEventSource = 'unknown'): void => {
     if (!isDropdownVisible.value) return
     isDropdownVisible.value = false
     onHideDropdown?.(source)
