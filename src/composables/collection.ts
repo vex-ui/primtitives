@@ -1,4 +1,4 @@
-import { computed, shallowReactive } from 'vue'
+import { computed, shallowReactive, type ComputedRef } from 'vue'
 import type { Getter, TemplateRef } from '@/types'
 
 export interface CollectionItem<T extends HTMLElement> {
@@ -7,7 +7,14 @@ export interface CollectionItem<T extends HTMLElement> {
   disabled?: Getter<boolean>
 }
 
-export function useCollection<T extends HTMLElement = HTMLElement>(id: string) {
+export interface Collection<T extends HTMLElement> {
+  add: (templateRef: TemplateRef<T>, disabled?: Getter<boolean>) => CollectionItem<T>
+  items: ComputedRef<CollectionItem<T>[]>
+  remove: (templateRef: TemplateRef<T>) => void
+  elements: ComputedRef<T[]>
+}
+
+export function useCollection<T extends HTMLElement = HTMLElement>(id: string): Collection<T> {
   let count = 0
   const collection = shallowReactive<Map<TemplateRef<T>, CollectionItem<T>>>(new Map())
 
