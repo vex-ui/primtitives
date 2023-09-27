@@ -101,13 +101,13 @@ export const ComboboxDropdown = defineComponent<ComboboxDropdownProps>(
     useClickOutside(
       listboxEl,
       () => {
-        hideDropdown('mouse')
+        hideDropdown()
       },
       { ignore: [triggerEl] }
     )
 
     useEscapeKey(() => {
-      hideDropdown('keyboard')
+      hideDropdown()
       triggerEl.value?.focus({ preventScroll: true })
     })
 
@@ -140,12 +140,22 @@ export const ComboboxDropdown = defineComponent<ComboboxDropdownProps>(
 // 📌 ComboboxListbox
 //----------------------------------------------------------------------------------------------------
 
-export const ComboboxListbox = defineComponent(
+export interface ComboboxListboxProps {
+  /**
+   * The orientation of the listbox.
+   * @defaultValue 'vertical'
+   */
+  orientation?: 'horizontal' | 'vertical'
+}
+
+export const ComboboxListbox = defineComponent<ComboboxListboxProps>(
   (p, { slots }) => {
-    const { listboxID, triggerID, listboxEl, triggerEl, getOptions } =
+    const { listboxID, triggerID, listboxEl, triggerEl, collection } =
       useComboboxContext('ComboboxListbox')
 
-    useRovingFocus(listboxEl, getOptions)
+    useRovingFocus(listboxEl, collection.elements, {
+      orientation: () => p.orientation ?? 'vertical',
+    })
 
     return () =>
       h(
@@ -160,7 +170,7 @@ export const ComboboxListbox = defineComponent(
         slots.default?.()
       )
   },
-  { name: 'ComboboxListbox' }
+  { name: 'ComboboxListbox', props: ['orientation'] }
 )
 
 //----------------------------------------------------------------------------------------------------
@@ -173,12 +183,17 @@ export interface ComboboxOptionProps {
 
 export const ComboboxOption = defineComponent<ComboboxOptionProps>(
   (p, { slots }) => {
+    const optionEl: TemplateRef = ref(null)
+    const { collection, group } = useComboboxContext('ComboboxOption')
+    collection.add(optionEl)
+
     return () =>
       h(
         'div',
         {
+          ref: optionEl,
           role: 'option',
-          'aria-selected': false,
+          'aria-selected': group.isSelected(p.value),
           'data-vex-value': p.value,
           tabindex: '-1',
         },
