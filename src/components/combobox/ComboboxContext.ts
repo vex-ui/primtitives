@@ -6,12 +6,11 @@ import {
   useSelectionGroup,
   type SelectionGroup,
   useCollection,
+  useDelayedOpen,
 } from '@/composables'
 import { ref, type InjectionKey, type Ref, provide, readonly, watch, toValue } from 'vue'
 import { isWatchable, noop } from '@/utils'
 import type { Collection } from '@/composables/collection'
-
-type ChangeEventSource = 'keyboard' | 'mouse' | 'unknown'
 
 export interface ComboboxContext {
   triggerID: string
@@ -25,16 +24,18 @@ export interface ComboboxContext {
   scrollBehavior: MaybeRefOrGetter<ScrollBehavior>
   isDropdownVisible: Readonly<Ref<boolean>>
 
-  showDropdown: (source?: ChangeEventSource) => void
-  hideDropdown: (source?: ChangeEventSource) => void
+  showDropdown: () => void
+  hideDropdown: () => void
 }
 
 export interface UseComboboxOptions {
   onSelect?: (value?: string) => void
-  onShowDropdown?: (source: ChangeEventSource) => void
-  onHideDropdown?: (source: ChangeEventSource) => void
+  onShowDropdown?: () => void
+  onHideDropdown?: () => void
 
   loop?: MaybeRefOrGetter<boolean>
+  hideDelay?: MaybeRefOrGetter<number>
+  showDelay?: MaybeRefOrGetter<number>
   searchable?: MaybeRefOrGetter<boolean>
   multiselect?: MaybeRefOrGetter<boolean>
   deselection?: MaybeRefOrGetter<boolean>
@@ -52,6 +53,8 @@ export function useCombobox(options: UseComboboxOptions = {}) {
     multiselect = false,
     deselection = false,
     scrollBehavior = 'auto',
+    hideDelay = 0,
+    showDelay = 0,
     onSelect,
     onHideDropdown,
     onShowDropdown,
@@ -64,17 +67,22 @@ export function useCombobox(options: UseComboboxOptions = {}) {
 
   const isDropdownVisible = ref(false)
 
-  const showDropdown = (source: ChangeEventSource = 'unknown'): void => {
-    if (isDropdownVisible.value) return
-    isDropdownVisible.value = true
-    onShowDropdown?.(source)
-  }
-
-  const hideDropdown = (source: ChangeEventSource = 'unknown'): void => {
-    if (!isDropdownVisible.value) return
-    isDropdownVisible.value = false
-    onHideDropdown?.(source)
-  }
+  const delayed = useDelayedOpen(
+    () => {
+      if (isDropdownVisible.value) return
+      isDropdownVisible.value = true
+      onShowDropdown?.()
+    },
+    () => {
+      if (!isDropdownVisible.value) return
+      isDropdownVisible.value = false
+      onHideDropdown?.()
+    },
+    {
+      defaultShowDelay: showDelay,
+      defaultHideDelay: hideDelay,
+    }
+  )
 
   const group = useSelectionGroup(ref<string[]>([]), { deselection, multiselect })
   const collection = useCollection(listboxID)
@@ -128,8 +136,8 @@ export function useCombobox(options: UseComboboxOptions = {}) {
     collection,
     scrollBehavior,
 
-    showDropdown,
-    hideDropdown,
+    showDropdown: delayed.show,
+    hideDropdown: delayed.hide,
     isDropdownVisible: readonly(isDropdownVisible),
   })
 
@@ -142,8 +150,8 @@ export function useCombobox(options: UseComboboxOptions = {}) {
     group: _group,
     collection,
 
-    showDropdown,
-    hideDropdown,
+    showDropdown: delayed.show,
+    hideDropdown: delayed.hide,
     isDropdownVisible: readonly(isDropdownVisible),
   }
 }
