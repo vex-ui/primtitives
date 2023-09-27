@@ -5,9 +5,11 @@ import {
   useID,
   useSelectionGroup,
   type SelectionGroup,
+  useCollection,
 } from '@/composables'
 import { ref, type InjectionKey, type Ref, provide, readonly, watch, toValue } from 'vue'
 import { isWatchable, noop } from '@/utils'
+import type { Collection } from '@/composables/collection'
 
 type ChangeEventSource = 'keyboard' | 'mouse' | 'unknown'
 
@@ -19,11 +21,10 @@ export interface ComboboxContext {
 
   loop: MaybeRefOrGetter<boolean>
   group: SelectionGroup<string>
+  collection: Collection<HTMLElement>
   scrollBehavior: MaybeRefOrGetter<ScrollBehavior>
   isDropdownVisible: Readonly<Ref<boolean>>
 
-  select: (value: string) => void
-  getOptions: () => HTMLElement[]
   showDropdown: (source?: ChangeEventSource) => void
   hideDropdown: (source?: ChangeEventSource) => void
 }
@@ -77,10 +78,11 @@ export function useCombobox(options: UseComboboxOptions = {}) {
   }
 
   const group = useSelectionGroup(selected, { deselection, multiselect })
+  const collection = useCollection(listboxID)
 
   const select = (value: string): void => {
     const inputEl = triggerEl.value
-    const optionEl = getOptions().find((item) => item.dataset.vexValue === value)
+    const optionEl = collection.elements.value.find((item) => item.dataset.vexValue === value)
     if (!optionEl || !inputEl) return
 
     clearAriaSelected()
@@ -91,7 +93,7 @@ export function useCombobox(options: UseComboboxOptions = {}) {
   }
 
   const deselect = (value: string): void => {
-    const optionEl = getOptions().find((item) => item.dataset.vexValue === value)
+    const optionEl = collection.elements.value.find((item) => item.dataset.vexValue === value)
     optionEl?.setAttribute('aria-selected', 'true')
     group.deselect(value)
   }
@@ -109,10 +111,6 @@ export function useCombobox(options: UseComboboxOptions = {}) {
   const clearSelected = (): void => {
     clearAriaSelected()
     group.clearSelected()
-  }
-
-  const getOptions = (): HTMLElement[] => {
-    return Array.from(listboxEl.value?.querySelectorAll<HTMLElement>('[role=option]') ?? [])
   }
 
   // when a user presses a printable key (i.e [a-z]) move focus back
@@ -155,10 +153,9 @@ export function useCombobox(options: UseComboboxOptions = {}) {
 
     loop,
     group: _group,
+    collection,
     scrollBehavior,
 
-    select,
-    getOptions,
     showDropdown,
     hideDropdown,
     isDropdownVisible: readonly(isDropdownVisible),
@@ -170,10 +167,8 @@ export function useCombobox(options: UseComboboxOptions = {}) {
     listboxID,
     listboxEl,
 
-    select,
-    selected,
-    getOptions,
-    clearAriaSelected,
+    group: _group,
+    collection,
 
     showDropdown,
     hideDropdown,
