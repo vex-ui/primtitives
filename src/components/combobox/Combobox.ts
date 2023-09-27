@@ -1,7 +1,7 @@
 import { useClickOutside, useEscapeKey, useFloating, useRovingFocus } from '@/composables'
 import type { TemplateRef } from '@/types'
 import type { Middleware, Padding, Placement, Strategy } from '@floating-ui/dom'
-import { defineComponent, h, nextTick, ref } from 'vue'
+import { defineComponent, h, nextTick, onUnmounted, ref } from 'vue'
 import { useComboboxContext } from './ComboboxContext'
 
 //----------------------------------------------------------------------------------------------------
@@ -185,7 +185,9 @@ export const ComboboxOption = defineComponent<ComboboxOptionProps>(
   (p, { slots }) => {
     const optionEl: TemplateRef = ref(null)
     const { collection, group } = useComboboxContext('ComboboxOption')
+
     collection.add(optionEl)
+    onUnmounted(() => collection.remove(optionEl))
 
     return () =>
       h(
