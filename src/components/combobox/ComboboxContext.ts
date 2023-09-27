@@ -1,16 +1,15 @@
-import type { MaybeRefOrGetter, TemplateRef } from '@/types'
 import {
+  useCollection,
   useContext,
+  useDelayedOpen,
   useEventListener,
   useID,
   useSelectionGroup,
   type SelectionGroup,
-  useCollection,
-  useDelayedOpen,
 } from '@/composables'
-import { ref, type InjectionKey, type Ref, provide, readonly, watch, toValue } from 'vue'
-import { isWatchable, noop } from '@/utils'
 import type { Collection } from '@/composables/collection'
+import type { MaybeRefOrGetter, TemplateRef } from '@/types'
+import { provide, readonly, ref, toValue, type InjectionKey, type Ref } from 'vue'
 
 export interface ComboboxContext {
   triggerID: string
