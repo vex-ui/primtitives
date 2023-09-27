@@ -179,6 +179,7 @@ export const ComboboxListbox = defineComponent<ComboboxListboxProps>(
 
 export interface ComboboxOptionProps {
   value: string
+  disabled?: boolean
 }
 
 export const ComboboxOption = defineComponent<ComboboxOptionProps>(
@@ -186,7 +187,7 @@ export const ComboboxOption = defineComponent<ComboboxOptionProps>(
     const optionEl: TemplateRef = ref(null)
     const { collection, group } = useComboboxContext('ComboboxOption')
 
-    collection.add(optionEl)
+    collection.add(optionEl, () => !p.disabled)
     onUnmounted(() => collection.remove(optionEl))
 
     return () =>
@@ -202,5 +203,11 @@ export const ComboboxOption = defineComponent<ComboboxOptionProps>(
         slots.default?.()
       )
   },
-  { name: 'ComboboxOption', props: ['value'] }
+  {
+    name: 'ComboboxOption',
+    props: {
+      disabled: Boolean,
+      value: String,
+    },
+  }
 )
