@@ -1,6 +1,13 @@
 import type { MaybeRefOrGetter, TemplateRef } from '@/types'
-import { useContext, useID } from '@/composables'
-import { ref, type InjectionKey, type Ref, provide, readonly } from 'vue'
+import {
+  useContext,
+  useEventListener,
+  useID,
+  useSelectionGroup,
+  type SelectionGroup,
+} from '@/composables'
+import { ref, type InjectionKey, type Ref, provide, readonly, watch, toValue } from 'vue'
+import { isWatchable, noop } from '@/utils'
 
 type ChangeEventSource = 'keyboard' | 'mouse' | 'unknown'
 
@@ -11,6 +18,7 @@ export interface ComboboxContext {
   triggerEl: TemplateRef<HTMLInputElement>
 
   loop: MaybeRefOrGetter<boolean>
+  group: SelectionGroup<string>
   scrollBehavior: MaybeRefOrGetter<ScrollBehavior>
   isDropdownVisible: Readonly<Ref<boolean>>
 
@@ -21,10 +29,14 @@ export interface ComboboxContext {
 }
 
 export interface UseComboboxOptions {
+  onSelect?: (value?: string) => void
   onShowDropdown?: (source: ChangeEventSource) => void
   onHideDropdown?: (source: ChangeEventSource) => void
 
   loop?: MaybeRefOrGetter<boolean>
+  searchable?: MaybeRefOrGetter<boolean>
+  multiselect?: MaybeRefOrGetter<boolean>
+  deselection?: MaybeRefOrGetter<boolean>
   scrollBehavior?: MaybeRefOrGetter<ScrollBehavior>
 }
 
@@ -33,7 +45,16 @@ export interface UseComboboxOptions {
 const COMBOBOX_INJECTION_KEY = Symbol() as InjectionKey<ComboboxContext>
 
 export function useCombobox(options: UseComboboxOptions = {}) {
-  const { onHideDropdown, onShowDropdown, scrollBehavior = 'auto', loop = true } = options
+  const {
+    loop = true,
+    searchable = false,
+    multiselect = false,
+    deselection = false,
+    scrollBehavior = 'auto',
+    onSelect,
+    onHideDropdown,
+    onShowDropdown,
+  } = options
 
   const listboxID = useID()
   const triggerID = useID()
@@ -41,7 +62,7 @@ export function useCombobox(options: UseComboboxOptions = {}) {
   const triggerEl: TemplateRef<HTMLInputElement> = ref(null)
 
   const isDropdownVisible = ref(false)
-  const selected = ref<string | undefined>()
+  const selected = ref<string[]>([])
 
   const showDropdown = (source: ChangeEventSource = 'unknown'): void => {
     if (isDropdownVisible.value) return
@@ -55,16 +76,27 @@ export function useCombobox(options: UseComboboxOptions = {}) {
     onHideDropdown?.(source)
   }
 
+  const group = useSelectionGroup(selected, { deselection, multiselect })
+
   const select = (value: string): void => {
-    const option = getOptions().find((item) => item.dataset.vexValue === value)
-    if (option) {
-      clearSelected()
-      option.setAttribute('aria-selected', 'true')
-      selected.value = option.dataset.vexValue
-    }
+    const inputEl = triggerEl.value
+    const optionEl = getOptions().find((item) => item.dataset.vexValue === value)
+    if (!optionEl || !inputEl) return
+
+    clearAriaSelected()
+    optionEl.setAttribute('aria-selected', 'true')
+    inputEl.value = value
+    group.select(value)
+    onSelect?.(value)
   }
 
-  const clearSelected = (): void => {
+  const deselect = (value: string): void => {
+    const optionEl = getOptions().find((item) => item.dataset.vexValue === value)
+    optionEl?.setAttribute('aria-selected', 'true')
+    group.deselect(value)
+  }
+
+  const clearAriaSelected = (): void => {
     const items = listboxEl.value?.querySelectorAll<HTMLElement>(
       '[role=option][aria-selected=true]'
     )
@@ -72,12 +104,47 @@ export function useCombobox(options: UseComboboxOptions = {}) {
     items?.forEach((item) => {
       item.setAttribute('aria-selected', 'false')
     })
+  }
 
-    selected.value = undefined
+  const clearSelected = (): void => {
+    clearAriaSelected()
+    group.clearSelected()
   }
 
   const getOptions = (): HTMLElement[] => {
     return Array.from(listboxEl.value?.querySelectorAll<HTMLElement>('[role=option]') ?? [])
+  }
+
+  // when a user presses a printable key (i.e [a-z]) move focus back
+  // to the input field.
+  useEventListener(listboxEl, 'keydown', (e: KeyboardEvent) => {
+    if (!toValue(searchable)) return
+
+    const isModifierKey = e.metaKey || e.ctrlKey || e.altKey
+    const isPrintableKey = e.key.length === 1 && !isModifierKey
+    const inputEl = triggerEl.value
+
+    if (isPrintableKey && inputEl) {
+      e.preventDefault()
+      inputEl.value += e.key
+      inputEl.focus()
+      return
+    }
+
+    if (e.key === 'Enter') {
+      e.preventDefault()
+      const activeOptionEl = (e.target as HTMLElement).closest<HTMLElement>('[role=option]')
+      activeOptionEl?.click()
+      return
+    }
+  })
+
+  const _group = {
+    select,
+    selected,
+    deselect,
+    clearSelected,
+    isSelected: group.isSelected,
   }
 
   provide(COMBOBOX_INJECTION_KEY, {
@@ -87,17 +154,27 @@ export function useCombobox(options: UseComboboxOptions = {}) {
     listboxEl,
 
     loop,
+    group: _group,
     scrollBehavior,
-    isDropdownVisible: readonly(isDropdownVisible),
 
     select,
     getOptions,
     showDropdown,
     hideDropdown,
+    isDropdownVisible: readonly(isDropdownVisible),
   })
 
   return {
+    triggerID,
+    triggerEl,
+    listboxID,
+    listboxEl,
+
     select,
+    selected,
+    getOptions,
+    clearAriaSelected,
+
     showDropdown,
     hideDropdown,
     isDropdownVisible: readonly(isDropdownVisible),
