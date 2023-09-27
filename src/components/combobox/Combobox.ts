@@ -1,10 +1,4 @@
-import {
-  isUsingKeyboard,
-  useClickOutside,
-  useEscapeKey,
-  useFloating,
-  useRovingFocus,
-} from '@/composables'
+import { useClickOutside, useEscapeKey, useFloating, useRovingFocus } from '@/composables'
 import type { TemplateRef } from '@/types'
 import type { Middleware, Padding, Placement, Strategy } from '@floating-ui/dom'
 import { defineComponent, h, nextTick, ref } from 'vue'
@@ -14,10 +8,27 @@ import { useComboboxContext } from './ComboboxContext'
 // 📌 ComboboxTrigger
 //----------------------------------------------------------------------------------------------------
 
-export const ComboboxTrigger = defineComponent(
-  (p) => {
+export interface ComboboxTriggerProps {
+  modelValue?: string
+  ariaAutocomplete?: 'none' | 'inline' | 'list' | 'both'
+}
+
+export const ComboboxTrigger = defineComponent<ComboboxTriggerProps>(
+  (p, { emit }) => {
     const { listboxID, listboxEl, isDropdownVisible, triggerID, triggerEl, showDropdown } =
       useComboboxContext('ComboboxTrigger')
+
+    const onInput = (e: Event) => {
+      emit('update:modelValue', (e.target as HTMLInputElement).value)
+    }
+
+    const onKeydown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowDown') {
+        e.preventDefault()
+        showDropdown()
+        nextTick(() => listboxEl.value?.focus())
+      }
+    }
 
     return () =>
       h('input', {
@@ -29,16 +40,16 @@ export const ComboboxTrigger = defineComponent(
         'aria-controls': listboxID,
         'aria-expanded': isDropdownVisible.value,
         'aria-autocomplete': p.ariaAutocomplete,
-        onKeydown: (e: KeyboardEvent) => {
-          if (e.key === 'ArrowDown') {
-            e.preventDefault()
-            showDropdown()
-            nextTick(() => listboxEl.value?.focus())
-          }
-        },
+        value: p.modelValue,
+        onInput,
+        onKeydown,
       })
   },
-  { name: 'ComboboxTrigger' }
+  {
+    name: 'ComboboxTrigger',
+    props: ['modelValue', 'ariaAutocomplete'],
+    emits: ['update:modelValue'],
+  }
 )
 
 //----------------------------------------------------------------------------------------------------
@@ -129,13 +140,9 @@ export const ComboboxDropdown = defineComponent<ComboboxDropdownProps>(
 // 📌 ComboboxListbox
 //----------------------------------------------------------------------------------------------------
 
-export interface ComboboxListboxProps {
-  ariaAutocomplete?: 'none' | 'inline' | 'list' | 'both'
-}
-
-export const ComboboxListbox = defineComponent<ComboboxListboxProps>(
+export const ComboboxListbox = defineComponent(
   (p, { slots }) => {
-    const { listboxID, triggerID, listboxEl, select, getOptions } =
+    const { listboxID, triggerID, listboxEl, triggerEl, getOptions } =
       useComboboxContext('ComboboxListbox')
 
     useRovingFocus(listboxEl, getOptions)
@@ -149,20 +156,11 @@ export const ComboboxListbox = defineComponent<ComboboxListboxProps>(
           ref: listboxEl,
           tabindex: '-1',
           'aria-labelledby': triggerID,
-          'aria-autocomplete': p.ariaAutocomplete,
-          onClick: (e: MouseEvent) => {
-            const option = (e.target as HTMLElement).closest<HTMLElement>('[role=option]')
-            const isSelected = option?.getAttribute('aria-selected') === 'true'
-            const value = option?.dataset.vexValue
-            if (!isSelected && value) {
-              select(value)
-            }
-          },
         },
         slots.default?.()
       )
   },
-  { name: 'ComboboxListbox', props: ['ariaAutocomplete'] }
+  { name: 'ComboboxListbox' }
 )
 
 //----------------------------------------------------------------------------------------------------
