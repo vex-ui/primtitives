@@ -82,18 +82,14 @@ export function useCombobox(options: UseComboboxOptions = {}) {
 
   const select = (value: string): void => {
     const inputEl = triggerEl.value
-    const optionEl = collection.elements.value.find((item) => item.dataset.vexValue === value)
-    if (!optionEl || !inputEl) return
+    if (!inputEl) return
 
-    optionEl.setAttribute('aria-selected', 'true')
     inputEl.value = value
     group.select(value)
     onSelect?.(value)
   }
 
   const deselect = (value: string): void => {
-    const optionEl = collection.elements.value.find((item) => item.dataset.vexValue === value)
-    optionEl?.setAttribute('aria-selected', 'true')
     group.deselect(value)
   }
 
