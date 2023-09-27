@@ -1,6 +1,6 @@
 import type { Getter, MaybeRefOrGetter, Orientation } from '@/types'
 import { wrapArray } from '@/utils'
-import { toValue, type Ref, toRef } from 'vue'
+import { toRef, toValue } from 'vue'
 import { useEventListener } from '.'
 import { useKeyIntent } from './key-intent'
 
