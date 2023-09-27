@@ -179,14 +179,16 @@ export const ComboboxOption = defineComponent<ComboboxOptionProps>(
     const optionEl: TemplateRef = ref(null)
     const { collection, group } = useComboboxContext('ComboboxOption')
 
-    collection.add(optionEl, () => !p.disabled)
+    const item = collection.add(optionEl, () => !p.disabled)
     onUnmounted(() => collection.remove(optionEl))
 
     return () =>
       h(
         'div',
         {
+          id: item.id,
           ref: optionEl,
+          disabled: !!item.disabled?.(),
           role: 'option',
           'aria-selected': group.isSelected(p.value),
           'data-vex-value': p.value,
