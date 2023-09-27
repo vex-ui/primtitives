@@ -1,11 +1,12 @@
-import { type Ref, watch } from 'vue'
-import type { Getter } from '@/types'
+import { type Ref, watch, toValue } from 'vue'
+import type { Getter, MaybeRefOrGetter } from '@/types'
+import { isWatchable } from '@/utils'
 
 type PrimitiveValue = string | number | boolean | symbol
 
 interface Options {
-  multiselect?: Getter<boolean>
-  deselection?: Getter<boolean>
+  multiselect?: MaybeRefOrGetter<boolean>
+  deselection?: MaybeRefOrGetter<boolean>
 }
 
 export interface SelectionGroup<T extends PrimitiveValue> {
@@ -23,12 +24,11 @@ export function useSelectionGroup<T extends PrimitiveValue>(
   selected: Ref<T[]>,
   options: Options = {}
 ): SelectionGroup<T> {
-  const deselection = options.deselection ?? (() => false)
-  const multiselect = options.multiselect ?? (() => false)
-  let strategy = multiselect() ? new MultiSelect(selected) : new SingleSelect(selected)
+  const { deselection = false, multiselect = false } = options
+  let strategy = toValue(multiselect) ? new MultiSelect(selected) : new SingleSelect(selected)
 
   const select = (value: T): void => {
-    strategy.select(value, deselection())
+    strategy.select(value, toValue(deselection))
   }
 
   const deselect = (value: T): void => {
@@ -43,10 +43,12 @@ export function useSelectionGroup<T extends PrimitiveValue>(
     selected.value = []
   }
 
-  watch(multiselect, (multi) => {
-    clearSelected()
-    strategy = multi ? new MultiSelect(selected) : new SingleSelect(selected)
-  })
+  if (isWatchable(multiselect)) {
+    watch(multiselect, (multi) => {
+      clearSelected()
+      strategy = multi ? new MultiSelect(selected) : new SingleSelect(selected)
+    })
+  }
 
   return {
     select,
