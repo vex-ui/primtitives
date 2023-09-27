@@ -25,8 +25,6 @@ export function useRovingFocus(
     (e, intent) => {
       e.preventDefault()
       e.stopPropagation()
-
-      // TODO: fastest way to shallow clone an array?
       let elements = [...toValue(children)]
 
       switch (intent) {
