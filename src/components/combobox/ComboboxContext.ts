@@ -16,13 +16,11 @@ export interface ComboboxContext {
   listboxID: string
   listboxEl: TemplateRef
   triggerEl: TemplateRef<HTMLInputElement>
-
   loop: MaybeRefOrGetter<boolean>
   group: SelectionGroup<string>
   collection: Collection<HTMLElement>
   scrollBehavior: MaybeRefOrGetter<ScrollBehavior>
   isDropdownVisible: Readonly<Ref<boolean>>
-
   showDropdown: () => void
   hideDropdown: () => void
 }
@@ -31,7 +29,6 @@ export interface UseComboboxOptions {
   onSelect?: (value?: string) => void
   onShowDropdown?: () => void
   onHideDropdown?: () => void
-
   loop?: MaybeRefOrGetter<boolean>
   hideDelay?: MaybeRefOrGetter<number>
   showDelay?: MaybeRefOrGetter<number>
@@ -41,11 +38,23 @@ export interface UseComboboxOptions {
   scrollBehavior?: MaybeRefOrGetter<ScrollBehavior>
 }
 
+interface UseComboboxReturn {
+  listboxID: string
+  triggerID: string
+  listboxEl: TemplateRef
+  triggerEl: TemplateRef<HTMLInputElement>
+  group: SelectionGroup<string>
+  collection: Collection<HTMLElement>
+  showDropdown: (delay?: number | undefined) => void
+  hideDropdown: (delay?: number | undefined) => void
+  isDropdownVisible: Readonly<Ref<boolean>>
+}
+
 // ----------------------------------------------------------------------------------------------------
 
 const COMBOBOX_INJECTION_KEY = Symbol() as InjectionKey<ComboboxContext>
 
-export function useCombobox(options: UseComboboxOptions = {}) {
+export function useCombobox(options: UseComboboxOptions = {}): UseComboboxReturn {
   const {
     loop = true,
     searchable = false,
