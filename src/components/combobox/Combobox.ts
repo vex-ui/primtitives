@@ -142,12 +142,17 @@ export interface ComboboxListboxProps {
 
 export const ComboboxListbox = defineComponent<ComboboxListboxProps>(
   (p, { slots }) => {
-    const { listboxID, triggerID, listboxEl, triggerEl, collection } =
-      useComboboxContext('ComboboxListbox')
+    const { listboxID, triggerID, listboxEl } = useComboboxContext('ComboboxListbox')
 
-    useRovingFocus(listboxEl, collection.elements, {
-      orientation: () => p.orientation ?? 'vertical',
-    })
+    useRovingFocus(
+      listboxEl,
+      // unfortunately we can't use collection.elements here because components inside v-for
+      // are not always registered in the same order as their dom order
+      () => Array.from(listboxEl.value?.querySelectorAll<HTMLElement>('[role=option]') ?? []),
+      {
+        orientation: () => p.orientation ?? 'vertical',
+      }
+    )
 
     return () =>
       h(
@@ -179,7 +184,7 @@ export const ComboboxOption = defineComponent<ComboboxOptionProps>(
     const optionEl: TemplateRef = ref(null)
     const { collection, group } = useComboboxContext('ComboboxOption')
 
-    const item = collection.add(optionEl, () => !p.disabled)
+    const item = collection.add(optionEl, () => !!p.disabled)
     onUnmounted(() => collection.remove(optionEl))
 
     return () =>
@@ -188,11 +193,11 @@ export const ComboboxOption = defineComponent<ComboboxOptionProps>(
         {
           id: item.id,
           ref: optionEl,
-          disabled: !!item.disabled?.(),
           role: 'option',
+          'aria-disabled': !!item.disabled?.(),
           'aria-selected': group.isSelected(p.value),
           'data-vex-value': p.value,
-          tabindex: '-1',
+          tabindex: item.disabled?.() ? undefined : '-1',
         },
         slots.default?.()
       )
