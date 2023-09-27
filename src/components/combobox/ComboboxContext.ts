@@ -63,7 +63,6 @@ export function useCombobox(options: UseComboboxOptions = {}) {
   const triggerEl: TemplateRef<HTMLInputElement> = ref(null)
 
   const isDropdownVisible = ref(false)
-  const selected = ref<string[]>([])
 
   const showDropdown = (source: ChangeEventSource = 'unknown'): void => {
     if (isDropdownVisible.value) return
@@ -77,7 +76,7 @@ export function useCombobox(options: UseComboboxOptions = {}) {
     onHideDropdown?.(source)
   }
 
-  const group = useSelectionGroup(selected, { deselection, multiselect })
+  const group = useSelectionGroup(ref<string[]>([]), { deselection, multiselect })
   const collection = useCollection(listboxID)
 
   const select = (value: string): void => {
@@ -87,14 +86,6 @@ export function useCombobox(options: UseComboboxOptions = {}) {
     inputEl.value = value
     group.select(value)
     onSelect?.(value)
-  }
-
-  const deselect = (value: string): void => {
-    group.deselect(value)
-  }
-
-  const clearSelected = (): void => {
-    group.clearSelected()
   }
 
   // when a user presses a printable key (i.e [a-z]) move focus back
@@ -122,11 +113,8 @@ export function useCombobox(options: UseComboboxOptions = {}) {
   })
 
   const _group = {
+    ...group,
     select,
-    selected,
-    deselect,
-    clearSelected,
-    isSelected: group.isSelected,
   }
 
   provide(COMBOBOX_INJECTION_KEY, {
