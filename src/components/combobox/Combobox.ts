@@ -134,7 +134,7 @@ export const ComboboxDropdown = defineComponent<ComboboxDropdownProps>(
 
 export interface ComboboxListboxProps {
   /**
-   * The orientation of the listbox.
+   * The orientation of the listbox, used internally for keyboard navigation.
    * @defaultValue 'vertical'
    */
   orientation?: 'horizontal' | 'vertical'
