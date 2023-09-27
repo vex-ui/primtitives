@@ -85,7 +85,6 @@ export function useCombobox(options: UseComboboxOptions = {}) {
     const optionEl = collection.elements.value.find((item) => item.dataset.vexValue === value)
     if (!optionEl || !inputEl) return
 
-    clearAriaSelected()
     optionEl.setAttribute('aria-selected', 'true')
     inputEl.value = value
     group.select(value)
@@ -98,18 +97,7 @@ export function useCombobox(options: UseComboboxOptions = {}) {
     group.deselect(value)
   }
 
-  const clearAriaSelected = (): void => {
-    const items = listboxEl.value?.querySelectorAll<HTMLElement>(
-      '[role=option][aria-selected=true]'
-    )
-
-    items?.forEach((item) => {
-      item.setAttribute('aria-selected', 'false')
-    })
-  }
-
   const clearSelected = (): void => {
-    clearAriaSelected()
     group.clearSelected()
   }
 
