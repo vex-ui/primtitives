@@ -43,8 +43,9 @@ export function getKeyIntent(key: NavigationKey, orientation: Orientation = 'ver
   }
 }
 
+const dir = useTextDirection()
+
 function getDirectionAwareKey(key: NavigationKey) {
-  const dir = useTextDirection()
   if (dir.value !== 'rtl') return key
   return key === 'ArrowLeft' ? 'ArrowRight' : key === 'ArrowRight' ? 'ArrowLeft' : key
 }
