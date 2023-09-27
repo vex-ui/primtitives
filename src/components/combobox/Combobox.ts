@@ -9,18 +9,13 @@ import { useComboboxContext } from './ComboboxContext'
 //----------------------------------------------------------------------------------------------------
 
 export interface ComboboxTriggerProps {
-  modelValue?: string
   ariaAutocomplete?: 'none' | 'inline' | 'list' | 'both'
 }
 
 export const ComboboxTrigger = defineComponent<ComboboxTriggerProps>(
-  (p, { emit }) => {
+  (p) => {
     const { listboxID, listboxEl, isDropdownVisible, triggerID, triggerEl, showDropdown } =
       useComboboxContext('ComboboxTrigger')
-
-    const onInput = (e: Event) => {
-      emit('update:modelValue', (e.target as HTMLInputElement).value)
-    }
 
     const onKeydown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowDown') {
@@ -40,15 +35,12 @@ export const ComboboxTrigger = defineComponent<ComboboxTriggerProps>(
         'aria-controls': listboxID,
         'aria-expanded': isDropdownVisible.value,
         'aria-autocomplete': p.ariaAutocomplete,
-        value: p.modelValue,
-        onInput,
         onKeydown,
       })
   },
   {
     name: 'ComboboxTrigger',
-    props: ['modelValue', 'ariaAutocomplete'],
-    emits: ['update:modelValue'],
+    props: ['ariaAutocomplete'],
   }
 )
 
