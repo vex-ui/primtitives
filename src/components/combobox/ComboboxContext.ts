@@ -104,36 +104,6 @@ export function useCombobox(options: UseComboboxOptions = {}): UseComboboxReturn
     onSelect?.(value)
   }
 
-  // when a user presses a printable key (i.e [a-z]) move focus back
-  // to the input field.
-  useEventListener(listboxEl, 'keydown', (e: KeyboardEvent) => {
-    if (!toValue(searchable)) return
-
-    const isModifierKey = e.metaKey || e.ctrlKey || e.altKey
-    const isPrintableKey = e.key.length === 1 && !isModifierKey
-    const input = triggerEl.value
-
-    if ((isPrintableKey || e.key === 'Backspace') && input) {
-      e.preventDefault()
-      if (isPrintableKey) {
-        input.value += e.key
-      } else if (e.key === 'Backspace') {
-        input.value = input.value.slice(0, -1)
-      }
-
-      input.focus()
-      return
-    }
-
-    if (e.key === 'Enter') {
-      e.preventDefault()
-      const activeEl = e.target as HTMLElement | null
-      const isOptionEl = activeEl?.getAttribute('role') === 'option'
-      if (isOptionEl) activeEl.click()
-      return
-    }
-  })
-
   const _group = {
     ...group,
     select,

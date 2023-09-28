@@ -1,4 +1,10 @@
-import { useClickOutside, useEscapeKey, useFloating, useRovingFocus } from '@/composables'
+import {
+  useClickOutside,
+  useEscapeKey,
+  useEventListener,
+  useFloating,
+  useRovingFocus,
+} from '@/composables'
 import type { TemplateRef } from '@/types'
 import type { Middleware, Padding, Placement, Strategy } from '@floating-ui/dom'
 import { defineComponent, h, nextTick, onUnmounted, ref } from 'vue'
@@ -138,11 +144,15 @@ export interface ComboboxListboxProps {
    * @defaultValue 'vertical'
    */
   orientation?: 'horizontal' | 'vertical'
+  /**
+   *  Whether to focus the ComboboxTrigger when the user types something.
+   */
+  focusTriggerOnType?: boolean
 }
 
 export const ComboboxListbox = defineComponent<ComboboxListboxProps>(
   (p, { slots }) => {
-    const { listboxID, triggerID, listboxEl } = useComboboxContext('ComboboxListbox')
+    const { listboxID, triggerEl, triggerID, listboxEl } = useComboboxContext('ComboboxListbox')
 
     useRovingFocus(
       listboxEl,
@@ -154,6 +164,36 @@ export const ComboboxListbox = defineComponent<ComboboxListboxProps>(
       }
     )
 
+    // when a user presses a printable key (i.e [a-z]) move focus back
+    // to the input field.
+    const onKeydown = (e: KeyboardEvent) => {
+      if (!p.focusTriggerOnType) return
+
+      const withModifierKey = e.metaKey || e.ctrlKey || e.altKey
+      const isPrintableKey = e.key.length === 1 && !withModifierKey
+      const input = triggerEl.value
+
+      if ((isPrintableKey || e.key === 'Backspace') && input) {
+        e.preventDefault()
+        if (isPrintableKey) {
+          input.value += e.key
+        } else if (e.key === 'Backspace') {
+          input.value = input.value.slice(0, -1)
+        }
+
+        input.focus()
+        return
+      }
+
+      if (e.key === 'Enter') {
+        e.preventDefault()
+        const activeEl = e.target as HTMLElement | null
+        const isOptionEl = activeEl?.getAttribute('role') === 'option'
+        if (isOptionEl) activeEl.click()
+        return
+      }
+    }
+
     return () =>
       h(
         'div',
@@ -163,11 +203,12 @@ export const ComboboxListbox = defineComponent<ComboboxListboxProps>(
           ref: listboxEl,
           tabindex: '-1',
           'aria-labelledby': triggerID,
+          onKeydown,
         },
         slots.default?.()
       )
   },
-  { name: 'ComboboxListbox', props: ['orientation'] }
+  { name: 'ComboboxListbox', props: ['orientation', 'focusTriggerOnType'] }
 )
 
 //----------------------------------------------------------------------------------------------------
