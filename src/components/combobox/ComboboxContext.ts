@@ -32,7 +32,6 @@ export interface UseComboboxOptions {
   loop?: MaybeRefOrGetter<boolean>
   hideDelay?: MaybeRefOrGetter<number>
   showDelay?: MaybeRefOrGetter<number>
-  searchable?: MaybeRefOrGetter<boolean>
   multiselect?: MaybeRefOrGetter<boolean>
   deselection?: MaybeRefOrGetter<boolean>
   scrollBehavior?: MaybeRefOrGetter<ScrollBehavior>
@@ -57,7 +56,6 @@ const COMBOBOX_INJECTION_KEY = Symbol() as InjectionKey<ComboboxContext>
 export function useCombobox(options: UseComboboxOptions = {}): UseComboboxReturn {
   const {
     loop = true,
-    searchable = false,
     multiselect = false,
     deselection = false,
     scrollBehavior = 'auto',
