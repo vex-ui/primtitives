@@ -1,10 +1,4 @@
-import {
-  useClickOutside,
-  useEscapeKey,
-  useEventListener,
-  useFloating,
-  useRovingFocus,
-} from '@/composables'
+import { useClickOutside, useEscapeKey, useFloating, useRovingFocus } from '@/composables'
 import type { Orientation, TemplateRef } from '@/types'
 import type { Middleware, Padding, Placement, Strategy } from '@floating-ui/dom'
 import { defineComponent, h, nextTick, onUnmounted, ref, type PropType } from 'vue'
