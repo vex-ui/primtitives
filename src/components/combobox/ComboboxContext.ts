@@ -111,19 +111,25 @@ export function useCombobox(options: UseComboboxOptions = {}): UseComboboxReturn
 
     const isModifierKey = e.metaKey || e.ctrlKey || e.altKey
     const isPrintableKey = e.key.length === 1 && !isModifierKey
-    const inputEl = triggerEl.value
+    const input = triggerEl.value
 
-    if (isPrintableKey && inputEl) {
+    if ((isPrintableKey || e.key === 'Backspace') && input) {
       e.preventDefault()
-      inputEl.value += e.key
-      inputEl.focus()
+      if (isPrintableKey) {
+        input.value += e.key
+      } else if (e.key === 'Backspace') {
+        input.value = input.value.slice(0, -1)
+      }
+
+      input.focus()
       return
     }
 
     if (e.key === 'Enter') {
       e.preventDefault()
-      const activeOptionEl = (e.target as HTMLElement).closest<HTMLElement>('[role=option]')
-      activeOptionEl?.click()
+      const activeEl = e.target as HTMLElement | null
+      const isOptionEl = activeEl?.getAttribute('role') === 'option'
+      if (isOptionEl) activeEl.click()
       return
     }
   })
