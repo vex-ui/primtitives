@@ -5,9 +5,9 @@ import {
   useFloating,
   useRovingFocus,
 } from '@/composables'
-import type { TemplateRef } from '@/types'
+import type { Orientation, TemplateRef } from '@/types'
 import type { Middleware, Padding, Placement, Strategy } from '@floating-ui/dom'
-import { defineComponent, h, nextTick, onUnmounted, ref } from 'vue'
+import { defineComponent, h, nextTick, onUnmounted, ref, type PropType } from 'vue'
 import { useComboboxContext } from './ComboboxContext'
 
 //----------------------------------------------------------------------------------------------------
@@ -143,7 +143,7 @@ export interface ComboboxListboxProps {
    * The orientation of the listbox, used internally for keyboard navigation.
    * @defaultValue 'vertical'
    */
-  orientation?: 'horizontal' | 'vertical'
+  orientation?: Orientation
   /**
    *  Whether to focus the ComboboxTrigger when the user types something.
    */
@@ -208,7 +208,10 @@ export const ComboboxListbox = defineComponent<ComboboxListboxProps>(
         slots.default?.()
       )
   },
-  { name: 'ComboboxListbox', props: ['orientation', 'focusTriggerOnType'] }
+  {
+    name: 'ComboboxListbox',
+    props: { orientation: String as PropType<Orientation>, focusTriggerOnType: Boolean },
+  }
 )
 
 //----------------------------------------------------------------------------------------------------
