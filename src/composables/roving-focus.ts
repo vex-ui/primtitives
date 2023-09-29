@@ -23,9 +23,11 @@ export function useRovingFocus(
   useKeyIntent(
     toRef(parent),
     (e, intent) => {
+      let elements = [...toValue(children)]
+      if (!elements.includes(e.target as HTMLElement)) return
+
       e.preventDefault()
       e.stopPropagation()
-      let elements = [...toValue(children)]
 
       switch (intent) {
         case 'next': {
