@@ -17,8 +17,10 @@ export const isWatchable = <T>(v: MaybeRefOrGetter<T>): v is WatchSource<T> => {
 // ----------------------------------------------------------------------------------------------------
 
 export function getIsIOS() {
-  return (
-    isClient && window?.navigator?.userAgent && /iP(ad|hone|od)/.test(window.navigator.userAgent)
+  return !!(
+    isClient &&
+    window?.navigator?.userAgent &&
+    /iP(ad|hone|od)/.test(window.navigator.userAgent)
   )
 }
 
