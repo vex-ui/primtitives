@@ -145,16 +145,17 @@ export interface ComboboxListboxProps {
 }
 
 export const ComboboxListbox = defineComponent<ComboboxListboxProps>(
-  (p, { slots }) => {
+  (p, { slots, emit }) => {
     const { listboxID, triggerEl, triggerID, listboxEl } = useComboboxContext('ComboboxListbox')
 
     useRovingFocus(
       listboxEl,
       // unfortunately we can't use collection.elements here because components inside v-for
-      // are not always registered in the same order as their dom order
+      // are not always mounted in the same order as their dom order
       () => Array.from(listboxEl.value?.querySelectorAll<HTMLElement>('[role=option]') ?? []),
       {
         orientation: () => p.orientation ?? 'vertical',
+        onEntryFocus: (e) => emit('entryFocus', e),
       }
     )
 
@@ -205,6 +206,7 @@ export const ComboboxListbox = defineComponent<ComboboxListboxProps>(
   {
     name: 'ComboboxListbox',
     props: { orientation: String as PropType<Orientation>, focusTriggerOnType: Boolean },
+    emits: ['entryFocus'],
   }
 )
 
